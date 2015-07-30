@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class content_model extends CI_Model
 {
-public function create($pillar,$image,$timestamp,$text)
+public function create($pillar,$image,$text)
 {
-$data=array("pillar" => $pillar,"image" => $image,"timestamp" => $timestamp,"text" => $text);
+$data=array("pillar" => $pillar,"image" => $image,"text" => $text);
 $query=$this->db->insert( "hq_content", $data );
 $id=$this->db->insert_id();
 if(!$query)

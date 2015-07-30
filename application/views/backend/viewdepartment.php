@@ -6,17 +6,20 @@
 <div class="row">
 <div class="col-lg-12">
 <section class="panel">
+<!--
 <header class="panel-heading">
 department Details
 </header>
+-->
 <div class="drawchintantable">
-<?php $this->chintantable->createsearch("department List");?>
+<?php $this->chintantable->createsearch("Department List");?>
 <table class="table table-striped table-hover" id="" cellpadding="0" cellspacing="0" >
 <thead>
 <tr>
 <th data-field="id">ID</th>
 <th data-field="name">Name</th>
 <th data-field="deptid">Dept id</th>
+<th data-field="action">Action</th>
 </tr>
 </thead>
 <tbody>

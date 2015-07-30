@@ -1,6 +1,6 @@
 <section class="panel">
 <header class="panel-heading">
-question Details
+Question Details
 </header>
 <div class="panel-body">
 <form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/editquestionsubmit");?>' enctype= 'multipart/form-data'>
@@ -39,7 +39,7 @@ question Details
 <label class="col-sm-2 control-label" for="normal-field">&nbsp;</label>
 <div class="col-sm-4">
 <button type="submit" class="btn btn-primary">Save</button>
-<a href='<?php echo site_url("site/viewpage"); ?>' class='btn btn-secondary'>Cancel</a>
+<a href='<?php echo site_url("site/viewquestion"); ?>' class='btn btn-secondary'>Cancel</a>
 </div>
 </div>
 </form>

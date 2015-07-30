@@ -8,7 +8,7 @@
 <div class="col-lg-12">
 <section class="panel">
 <header class="panel-heading">
-options Details
+Options Details
 </header>
 <div class="panel-body">
 <form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/createoptionssubmit");?>' enctype= 'multipart/form-data'>
@@ -65,7 +65,7 @@ options Details
 <label class="col-sm-2 control-label" for="normal-field">&nbsp;</label>
 <div class="col-sm-4">
 <button type="submit" class="btn btn-primary">Save</button>
-<a href="<?php echo site_url("site/viewpage"); ?>" class="btn btn-secondary">Cancel</a>
+<a href="<?php echo site_url("site/viewoptions"); ?>" class="btn btn-secondary">Cancel</a>
 </div>
 </div>
 </form>

@@ -191,6 +191,12 @@
 							<?php echo form_dropdown( 'language',$language,set_value( 'language',$before->language), 'class="chzn-select form-control" 	data-placeholder="Choose a Logintype..."'); ?>
 						</div>
 					</div>
+						<div class=" form-group">
+						<label class="col-sm-2 control-label">Team</label>
+						<div class="col-sm-4">
+							<?php echo form_dropdown( 'team',$team,set_value( 'team',$before->team), 'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."'); ?>
+						</div>
+					</div>
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">&nbsp;</label>
 				  <div class="col-sm-4">

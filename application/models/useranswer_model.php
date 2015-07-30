@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class useranswer_model extends CI_Model
 {
-public function create($user,$pillar,$question,$option,$order,$timestamp)
+public function create($user,$pillar,$question,$option,$order)
 {
-$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order,"timestamp" => $timestamp);
+$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order);
 $query=$this->db->insert( "hq_useranswer", $data );
 $id=$this->db->insert_id();
 if(!$query)

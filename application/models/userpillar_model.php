@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class userpillar_model extends CI_Model
 {
-public function create($user,$pillar,$timestamp)
+public function create($user,$pillar)
 {
-$data=array("user" => $user,"pillar" => $pillar,"timestamp" => $timestamp);
+$data=array("user" => $user,"pillar" => $pillar);
 $query=$this->db->insert( "hq_userpillar", $data );
 $id=$this->db->insert_id();
 if(!$query)

@@ -35,6 +35,13 @@ class Site extends CI_Controller
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
+			$data[ 'gender' ] =$this->user_model->getgendertypedropdown();
+		$data[ 'maritalstatus' ] =$this->user_model->getmaritalstatustypedropdown();
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
+		$data[ 'team' ] =$this->user_model->getteamdropdown();
 //        $data['category']=$this->category_model->getcategorydropdown();
 		$data[ 'page' ] = 'createuser';
 		$data[ 'title' ] = 'Create User';
@@ -59,7 +66,14 @@ class Site extends CI_Controller
 			$data['accesslevel']=$this->user_model->getaccesslevels();
             $data[ 'status' ] =$this->user_model->getstatusdropdown();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
-            $data['category']=$this->category_model->getcategorydropdown();
+				$data[ 'gender' ] =$this->user_model->getgendertypedropdown();
+		$data[ 'maritalstatus' ] =$this->user_model->getmaritalstatustypedropdown();
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
+//            $data['category']=$this->category_model->getcategorydropdown();
+			$data[ 'team' ] =$this->user_model->getteamdropdown();
             $data[ 'page' ] = 'createuser';
             $data[ 'title' ] = 'Create User';
             $this->load->view( 'template', $data );	
@@ -86,6 +100,7 @@ class Site extends CI_Controller
             $employeeid=$this->input->post('employeeid');
             $branch=$this->input->post('branch');
             $language=$this->input->post('language');
+            $team=$this->input->post('team');
 //            $category=$this->input->post('category');
             
              $config['upload_path'] = './uploads/';
@@ -123,7 +138,7 @@ class Site extends CI_Controller
                 
 			}
             
-			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$language)==0)
+			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$language,$team)==0)
 			$data['alerterror']="New user could not be created.";
 			else
 			$data['alertsuccess']="User created Successfully.";
@@ -227,6 +242,13 @@ class Site extends CI_Controller
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
+		$data[ 'gender' ] =$this->user_model->getgendertypedropdown();
+		$data[ 'maritalstatus' ] =$this->user_model->getmaritalstatustypedropdown();
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
+		$data[ 'team' ] =$this->user_model->getteamdropdown();
 		$data['before']=$this->user_model->beforeedit($this->input->get('id'));
 		$data['page']='edituser';
 		$data['page2']='block/userblock';
@@ -253,6 +275,13 @@ class Site extends CI_Controller
 			$data[ 'status' ] =$this->user_model->getstatusdropdown();
 			$data['accesslevel']=$this->user_model->getaccesslevels();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
+				$data[ 'gender' ] =$this->user_model->getgendertypedropdown();
+		$data[ 'maritalstatus' ] =$this->user_model->getmaritalstatustypedropdown();
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
+			$data[ 'team' ] =$this->user_model->getteamdropdown();
 			$data['before']=$this->user_model->beforeedit($this->input->post('id'));
 			$data['page']='edituser';
 //			$data['page2']='block/userblock';
@@ -284,6 +313,7 @@ class Site extends CI_Controller
             $branch=$this->input->post('branch');
             $timestamp=$this->input->post('timestamp');
             $language=$this->input->post('language');
+            $team=$this->input->post('team');
 //            $category=$this->input->get_post('category');
             
             $config['upload_path'] = './uploads/';
@@ -328,7 +358,7 @@ class Site extends CI_Controller
                 $image=$image->image;
             }
             
-			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$timestamp,$language)==0)
+			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$timestamp,$language,$team)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -425,6 +455,7 @@ public function createbranch()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createbranch";
+$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Create branch";
 $this->load->view("template",$data);
 }
@@ -440,6 +471,7 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createbranch";
+$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Create branch";
 $this->load->view("template",$data);
 }
@@ -629,6 +661,131 @@ $this->department_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewdepartment";
 $this->load->view("redirect",$data);
 }
+	
+//TEAM STARTS	
+	public function viewteam()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="viewteam";
+$data["base_url"]=site_url("site/viewteamjson");
+$data["title"]="View team";
+$this->load->view("template",$data);
+}
+function viewteamjson()
+{
+$elements=array();
+$elements[0]=new stdClass();
+$elements[0]->field="`hq_team`.`id`";
+$elements[0]->sort="1";
+$elements[0]->header="ID";
+$elements[0]->alias="id";
+$elements[1]=new stdClass();
+$elements[1]->field="`hq_team`.`name`";
+$elements[1]->sort="1";
+$elements[1]->header="Name";
+$elements[1]->alias="name";
+$elements[2]=new stdClass();
+$elements[2]->field="`hq_team`.`teamid`";
+$elements[2]->sort="1";
+$elements[2]->header="Team id";
+$elements[2]->alias="teamid";
+$search=$this->input->get_post("search");
+$pageno=$this->input->get_post("pageno");
+$orderby=$this->input->get_post("orderby");
+$orderorder=$this->input->get_post("orderorder");
+$maxrow=$this->input->get_post("maxrow");
+if($maxrow=="")
+{
+$maxrow=20;
+}
+if($orderby=="")
+{
+$orderby="id";
+$orderorder="ASC";
+}
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_team`");
+$this->load->view("json",$data);
+}
+
+public function createteam()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="createteam";
+$data["title"]="Create team";
+$this->load->view("template",$data);
+}
+public function createteamsubmit() 
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("name","Name","trim");
+$this->form_validation->set_rules("teamid","Team id","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="createteam";
+$data["title"]="Create team";
+$this->load->view("template",$data);
+}
+else
+{
+$name=$this->input->get_post("name");
+$teamid=$this->input->get_post("teamid");
+if($this->team_model->create($name,$teamid)==0)
+$data["alerterror"]="New team could not be created.";
+else
+$data["alertsuccess"]="team created Successfully.";
+$data["redirect"]="site/viewteam";
+$this->load->view("redirect",$data);
+}
+}
+public function editteam()
+{
+$access=array("1");
+$this->checkaccess($access);
+$data["page"]="editteam";
+$data["title"]="Edit team";
+$data["before"]=$this->team_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+public function editteamsubmit()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->form_validation->set_rules("id","ID","trim");
+$this->form_validation->set_rules("name","Name","trim");
+$this->form_validation->set_rules("teamid","Team id","trim");
+if($this->form_validation->run()==FALSE)
+{
+$data["alerterror"]=validation_errors();
+$data["page"]="editteam";
+$data["title"]="Edit team";
+$data["before"]=$this->team_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+else
+{
+$id=$this->input->get_post("id");
+$name=$this->input->get_post("name");
+$teamid=$this->input->get_post("teamid");
+if($this->team_model->edit($id,$name,$teamid)==0)
+$data["alerterror"]="New team could not be Updated.";
+else
+$data["alertsuccess"]="team Updated Successfully.";
+$data["redirect"]="site/viewteam";
+$this->load->view("redirect",$data);
+}
+}
+public function deleteteam()
+{
+$access=array("1");
+$this->checkaccess($access);
+$this->team_model->delete($this->input->get("id"));
+$data["redirect"]="site/viewteam";
+$this->load->view("redirect",$data);
+}
 public function viewdesignation()
 {
 $access=array("1");
@@ -679,6 +836,7 @@ public function createdesignation()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createdesignation";
+	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Create designation";
 $this->load->view("template",$data);
 }
@@ -692,6 +850,7 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createdesignation";
+	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Create designation";
 $this->load->view("template",$data);
 }
@@ -712,6 +871,7 @@ public function editdesignation()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="editdesignation";
+	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Edit designation";
 $data["before"]=$this->designation_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -727,6 +887,7 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="editdesignation";
+	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
 $data["title"]="Edit designation";
 $data["before"]=$this->designation_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -902,7 +1063,7 @@ $elements[0]->sort="1";
 $elements[0]->header="ID";
 $elements[0]->alias="id";
 $elements[1]=new stdClass();
-$elements[1]->field="`hq_question`.`pillar`";
+$elements[1]->field="`hq_pillar`.`name`";
 $elements[1]->sort="1";
 $elements[1]->header="Pillar";
 $elements[1]->alias="pillar";
@@ -940,7 +1101,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_question`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_question` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`hq_question`.`pillar`");
 $this->load->view("json",$data);
 }
 
@@ -949,6 +1110,8 @@ public function createquestion()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createquestion";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["noofans"]=$this->question_model->getnoofansdropdown();
 $data["title"]="Create question";
 $this->load->view("template",$data);
 }
@@ -965,6 +1128,9 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createquestion";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["noofans"]=$this->question_model->getnoofansdropdown();
+$data["noofans"]=$this->question_model->getnoofansdropdown();
 $data["title"]="Create question";
 $this->load->view("template",$data);
 }
@@ -973,9 +1139,9 @@ else
 $pillar=$this->input->get_post("pillar");
 $noofans=$this->input->get_post("noofans");
 $order=$this->input->get_post("order");
-$timestamp=$this->input->get_post("timestamp");
+//$timestamp=$this->input->get_post("timestamp");
 $text=$this->input->get_post("text");
-if($this->question_model->create($pillar,$noofans,$order,$timestamp,$text)==0)
+if($this->question_model->create($pillar,$noofans,$order,$text)==0)
 $data["alerterror"]="New question could not be created.";
 else
 $data["alertsuccess"]="question created Successfully.";
@@ -988,6 +1154,8 @@ public function editquestion()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="editquestion";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["noofans"]=$this->question_model->getnoofansdropdown();
 $data["title"]="Edit question";
 $data["before"]=$this->question_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1006,6 +1174,8 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="editquestion";
+$data["noofans"]=$this->question_model->getnoofansdropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["title"]="Edit question";
 $data["before"]=$this->question_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1039,6 +1209,7 @@ public function viewoptions()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="viewoptions";
+	
 $data["base_url"]=site_url("site/viewoptionsjson");
 $data["title"]="View options";
 $this->load->view("template",$data);
@@ -1114,6 +1285,8 @@ public function createoptions()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createoptions";
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["representation"]=$this->options_model->getrepresentationdropdown();
 $data["title"]="Create options";
 $this->load->view("template",$data);
 }
@@ -1133,6 +1306,8 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createoptions";
+$data["representation"]=$this->options_model->getrepresentationdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
 $data["title"]="Create options";
 $this->load->view("template",$data);
 }
@@ -1193,6 +1368,8 @@ public function editoptions()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="editoptions";
+$data["representation"]=$this->options_model->getrepresentationdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
 $data["title"]="Edit options";
 $data["before"]=$this->options_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1214,6 +1391,8 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="editoptions";
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["representation"]=$this->options_model->getrepresentationdropdown();
 $data["title"]="Edit options";
 $data["before"]=$this->options_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1304,12 +1483,12 @@ $elements[0]->sort="1";
 $elements[0]->header="ID";
 $elements[0]->alias="id";
 $elements[1]=new stdClass();
-$elements[1]->field="`hq_useranswer`.`user`";
+$elements[1]->field="`user`.`name`";
 $elements[1]->sort="1";
 $elements[1]->header="User";
 $elements[1]->alias="user";
 $elements[2]=new stdClass();
-$elements[2]->field="`hq_useranswer`.`pillar`";
+$elements[2]->field="`hq_pillar`.`name`";
 $elements[2]->sort="1";
 $elements[2]->header="Pillar";
 $elements[2]->alias="pillar";
@@ -1347,7 +1526,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_useranswer`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_useranswer` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`hq_useranswer`.`pillar` LEFT OUTER JOIN `user` ON `user`.`id`=`hq_useranswer`.`user`");
 $this->load->view("json",$data);
 }
 
@@ -1356,6 +1535,10 @@ public function createuseranswer()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createuseranswer";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["option"]=$this->options_model->getoptionsdropdown();
 $data["title"]="Create useranswer";
 $this->load->view("template",$data);
 }
@@ -1373,6 +1556,10 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createuseranswer";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["option"]=$this->options_model->getoptionsdropdown();
 $data["title"]="Create useranswer";
 $this->load->view("template",$data);
 }
@@ -1383,8 +1570,8 @@ $pillar=$this->input->get_post("pillar");
 $question=$this->input->get_post("question");
 $option=$this->input->get_post("option");
 $order=$this->input->get_post("order");
-$timestamp=$this->input->get_post("timestamp");
-if($this->useranswer_model->create($user,$pillar,$question,$option,$order,$timestamp)==0)
+//$timestamp=$this->input->get_post("timestamp");
+if($this->useranswer_model->create($user,$pillar,$question,$option,$order)==0)
 $data["alerterror"]="New useranswer could not be created.";
 else
 $data["alertsuccess"]="useranswer created Successfully.";
@@ -1397,6 +1584,10 @@ public function edituseranswer()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="edituseranswer";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["option"]=$this->options_model->getoptionsdropdown();
 $data["title"]="Edit useranswer";
 $data["before"]=$this->useranswer_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1416,6 +1607,10 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="edituseranswer";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["option"]=$this->options_model->getoptionsdropdown();
 $data["title"]="Edit useranswer";
 $data["before"]=$this->useranswer_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1463,12 +1658,12 @@ $elements[0]->sort="1";
 $elements[0]->header="ID";
 $elements[0]->alias="id";
 $elements[1]=new stdClass();
-$elements[1]->field="`hq_userpillar`.`user`";
+$elements[1]->field="`user`.`name`";
 $elements[1]->sort="1";
 $elements[1]->header="User";
 $elements[1]->alias="user";
 $elements[2]=new stdClass();
-$elements[2]->field="`hq_userpillar`.`pillar`";
+$elements[2]->field="`hq_pillar`.`name`";
 $elements[2]->sort="1";
 $elements[2]->header="Pillar";
 $elements[2]->alias="pillar";
@@ -1491,7 +1686,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_userpillar`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_userpillar` LEFT OUTER JOIN `user` ON `user`.`id`=`hq_userpillar`.`user` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`hq_userpillar`.`pillar`");
 $this->load->view("json",$data);
 }
 
@@ -1500,6 +1695,8 @@ public function createuserpillar()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createuserpillar";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["title"]="Create userpillar";
 $this->load->view("template",$data);
 }
@@ -1514,6 +1711,8 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createuserpillar";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["title"]="Create userpillar";
 $this->load->view("template",$data);
 }
@@ -1521,8 +1720,8 @@ else
 {
 $user=$this->input->get_post("user");
 $pillar=$this->input->get_post("pillar");
-$timestamp=$this->input->get_post("timestamp");
-if($this->userpillar_model->create($user,$pillar,$timestamp)==0)
+//$timestamp=$this->input->get_post("timestamp");
+if($this->userpillar_model->create($user,$pillar)==0)
 $data["alerterror"]="New userpillar could not be created.";
 else
 $data["alertsuccess"]="userpillar created Successfully.";
@@ -1536,6 +1735,8 @@ $access=array("1");
 $this->checkaccess($access);
 $data["page"]="edituserpillar";
 $data["title"]="Edit userpillar";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["before"]=$this->userpillar_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }
@@ -1552,6 +1753,8 @@ if($this->form_validation->run()==FALSE)
 $data["alerterror"]=validation_errors();
 $data["page"]="edituserpillar";
 $data["title"]="Edit userpillar";
+$data["user"]=$this->user_model->getuserdropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["before"]=$this->userpillar_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }
@@ -1595,7 +1798,7 @@ $elements[0]->sort="1";
 $elements[0]->header="ID";
 $elements[0]->alias="id";
 $elements[1]=new stdClass();
-$elements[1]->field="`hq_content`.`pillar`";
+$elements[1]->field="`hq_pillar`.`name`";
 $elements[1]->sort="1";
 $elements[1]->header="Pillar";
 $elements[1]->alias="pillar";
@@ -1628,7 +1831,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_content`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hq_content` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`hq_content`.`pillar`");
 $this->load->view("json",$data);
 }
 
@@ -1637,6 +1840,7 @@ public function createcontent()
 $access=array("1");
 $this->checkaccess($access);
 $data["page"]="createcontent";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["title"]="Create content";
 $this->load->view("template",$data);
 }
@@ -1652,6 +1856,7 @@ if($this->form_validation->run()==FALSE)
 {
 $data["alerterror"]=validation_errors();
 $data["page"]="createcontent";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["title"]="Create content";
 $this->load->view("template",$data);
 }
@@ -1659,7 +1864,7 @@ else
 {
 $pillar=$this->input->get_post("pillar");
 //$image=$this->input->get_post("image");
-$timestamp=$this->input->get_post("timestamp");
+//$timestamp=$this->input->get_post("timestamp");
 $text=$this->input->get_post("text");
 	  $config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -1695,7 +1900,7 @@ $text=$this->input->get_post("text");
                 }
                 
 			}
-if($this->content_model->create($pillar,$image,$timestamp,$text)==0)
+if($this->content_model->create($pillar,$image,$text)==0)
 $data["alerterror"]="New content could not be created.";
 else
 $data["alertsuccess"]="content created Successfully.";
@@ -1709,6 +1914,7 @@ $access=array("1");
 $this->checkaccess($access);
 $data["page"]="editcontent";
 $data["title"]="Edit content";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["before"]=$this->content_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }
@@ -1726,6 +1932,7 @@ if($this->form_validation->run()==FALSE)
 $data["alerterror"]=validation_errors();
 $data["page"]="editcontent";
 $data["title"]="Edit content";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["before"]=$this->content_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }

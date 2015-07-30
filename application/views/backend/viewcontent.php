@@ -6,11 +6,13 @@
 <div class="row">
 <div class="col-lg-12">
 <section class="panel">
+<!--
 <header class="panel-heading">
 content Details
 </header>
+-->
 <div class="drawchintantable">
-<?php $this->chintantable->createsearch("content List");?>
+<?php $this->chintantable->createsearch("Content List");?>
 <table class="table table-striped table-hover" id="" cellpadding="0" cellspacing="0" >
 <thead>
 <tr>
@@ -18,7 +20,7 @@ content Details
 <th data-field="pillar">Pillar</th>
 <th data-field="image">Image</th>
 <th data-field="timestamp">Time stamp</th>
-<th data-field="text">Text</th>
+<th data-field="action">Action</th>
 </tr>
 </thead>
 <tbody>
@@ -29,7 +31,12 @@ content Details
 </section>
 <script>
 function drawtable(resultrow) {
-return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.pillar + "</td><td>" + resultrow.image + "</td><td>" + resultrow.timestamp + "</td><td>" + resultrow.text + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editcontent?id=');?>"+resultrow.id+"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deletecontent?id='); ?>"+resultrow.id+"'><i class='icon-trash '></i></a></td></tr>";
+	var image="<a href='<?php echo base_url('uploads').'/'; ?>"+resultrow.image+"' target='_blank'><img src='<?php echo base_url('uploads').'/'; ?>"+resultrow.image+"' width='80px' height='80px'></a>";
+                if(resultrow.image=="")
+                {
+                image="No Receipt Available";
+                }
+return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.pillar + "</td><td>" + image + "</td><td>" + resultrow.timestamp + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editcontent?id=');?>"+resultrow.id+"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deletecontent?id='); ?>"+resultrow.id+"'><i class='icon-trash '></i></a></td></tr>";
 }
 generatejquery("<?php echo $base_url;?>");
 </script>

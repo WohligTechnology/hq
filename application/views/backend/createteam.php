@@ -8,10 +8,10 @@
 <div class="col-lg-12">
 <section class="panel">
 <header class="panel-heading">
-Department Details
+Team Details
 </header>
 <div class="panel-body">
-<form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/createdepartmentsubmit");?>' enctype= 'multipart/form-data'>
+<form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/createteamsubmit");?>' enctype= 'multipart/form-data'>
 <div class="panel-body">
 <div class="form-group">
 <label class="col-sm-2 control-label" for="normal-field">Name</label>
@@ -20,16 +20,16 @@ Department Details
 </div>
 </div>
 <div class="form-group">
-<label class="col-sm-2 control-label" for="normal-field">Dept id</label>
+<label class="col-sm-2 control-label" for="normal-field">Team id</label>
 <div class="col-sm-4">
-<input type="text" id="normal-field" class="form-control" name="deptid" value='<?php echo set_value('deptid');?>'>
+<input type="text" id="normal-field" class="form-control" name="teamid" value='<?php echo set_value('teamid');?>'>
 </div>
 </div>
 <div class="form-group">
 <label class="col-sm-2 control-label" for="normal-field">&nbsp;</label>
 <div class="col-sm-4">
 <button type="submit" class="btn btn-primary">Save</button>
-<a href="<?php echo site_url("site/viewdepartment"); ?>" class="btn btn-secondary">Cancel</a>
+<a href="<?php echo site_url("site/viewteam"); ?>" class="btn btn-secondary">Cancel</a>
 </div>
 </div>
 </form>

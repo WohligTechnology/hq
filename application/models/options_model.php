@@ -41,5 +41,28 @@ return $query;
 		$query=$this->db->query("SELECT `image` FROM `hq_options` WHERE `id`='$id'")->row();
 		return $query;
 	}
+		public function getoptionsdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `hq_options`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->text;
+		}
+		
+		return $return;
+	}
+	public function getrepresentationdropdown()
+	{
+
+		$representation=array(
+			"0"=>"Pictorial",
+			"1"=>"Text"
+		);
+		
+		
+		return $representation;
+	}
 }
 ?>

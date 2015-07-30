@@ -6,11 +6,13 @@
 <div class="row">
 <div class="col-lg-12">
 <section class="panel">
+<!--
 <header class="panel-heading">
 userpillar Details
 </header>
+-->
 <div class="drawchintantable">
-<?php $this->chintantable->createsearch("userpillar List");?>
+<?php $this->chintantable->createsearch("Userpillar List");?>
 <table class="table table-striped table-hover" id="" cellpadding="0" cellspacing="0" >
 <thead>
 <tr>
@@ -18,6 +20,7 @@ userpillar Details
 <th data-field="user">User</th>
 <th data-field="pillar">Pillar</th>
 <th data-field="timestamp">Time stamp</th>
+<th data-field="action">Action</th>
 </tr>
 </thead>
 <tbody>

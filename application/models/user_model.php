@@ -32,7 +32,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$language)
+	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$language,$team)
 	{
 		$data  = array(
 			'name' => $name,
@@ -54,7 +54,8 @@ class User_model extends CI_Model
 			'description' => $description,
 			'employeeid' => $employeeid,
 			'branch' => $branch,
-			'language' => $language
+			'language' => $language,
+			'team' => $team
 		);
 		$query=$this->db->insert( 'user', $data );
 		$id=$this->db->insert_id();
@@ -98,7 +99,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$timestamp,$language)
+	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$username,$gender,$age,$maritalstatus,$designation,$department,$noofyearsinorganization,$spanofcontrol,$description,$employeeid,$branch,$timestamp,$language,$team)
 	{
 		$data  = array(
 			'name' => $name,
@@ -121,7 +122,8 @@ class User_model extends CI_Model
 			'employeeid' => $employeeid,
 			'branch' => $branch,
 			'timestamp' => $timestamp,
-			'language' => $language
+			'language' => $language,
+			'team' => $team
 		);
 		if($password != "")
 			$data['password'] =md5($password);
@@ -214,8 +216,90 @@ class User_model extends CI_Model
 		}
 		
 		return $return;
+	} 
+	public function getteamdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `hq_team`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
 	}
-    
+
+	  public function getmaritalstatustypedropdown()
+	{
+		$maritalstatus=array(
+			"0"=>"Single",
+			"1"=>"Married", 
+			"2"=>"Separated",
+			"3"=>"Divorced",
+			"4"=>"Widowed" 
+		);
+
+		
+		return $maritalstatus;
+	}
+	public function getgendertypedropdown()
+	{
+		$gender=array(
+			"0"=>"Male",
+			"1"=>"Female" 
+		);
+
+		
+		return $gender;
+	} 	
+	public function getlanguagetypedropdown()
+	{
+		$language=array(
+			"0"=>"English"
+		);
+
+		
+		return $language;
+	} 
+	public function getdesignationtypedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `hq_designation`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	} 
+	public function getdepartmenttypedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `hq_department`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+	public function getbranchtypedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `hq_branch`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+	
+	
 	function changestatus($id)
 	{
 		$query=$this->db->query("SELECT `status` FROM `user` WHERE `id`='$id'")->row();
