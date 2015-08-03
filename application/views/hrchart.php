@@ -5,7 +5,7 @@
 <div id="container" style="height: 400px"></div>
 <div id="container"></div>
 <div id="container1"></div>
-<div id="container2"></div>
+<!--<div id="container2"></div>-->
 <script>
     
     $(function () {
@@ -15,12 +15,12 @@
             },
             chart: {
                 type: 'column',
-                options3d: {
-                    enabled: true,
-                    alpha: 15,
-                    beta: 15,
-                    depth: 50
-                }
+//                options3d: {
+//                    enabled: true,
+//                    alpha: 15,
+//                    beta: 15,
+//                    depth: 50
+//                }
             },
             title: {
                 text: 'Pillar-Wise Average'
@@ -28,7 +28,7 @@
             xAxis: {
                 categories: [
                 <?php
-                    foreach($weightgraphbyuser as $key=>$value)
+                    foreach($weightgraph as $key=>$value)
                     {
                         if($key==0)
                         {
@@ -53,7 +53,7 @@
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
@@ -68,7 +68,7 @@
                 name: 'Pillar',
                 data: [
                 <?php
-                    foreach($weightgraphbyuser as $key=>$value)
+                    foreach($weightgraph as $key=>$value)
                     {
                         if($key==0)
                         {
@@ -86,7 +86,7 @@
                 name: 'Expected',
                 data: [
                 <?php
-                    foreach($weightgraphbyuser as $key=>$value)
+                    foreach($weightgraph as $key=>$value)
                     {
                         if($key==0)
                         {
@@ -101,18 +101,18 @@
                 ]
 
         }, {
-                name: 'Me',
+                name: 'Actual',
                 data: [
                 <?php
-                    foreach($weightgraphbyuser as $key=>$value)
+                    foreach($weightgraph as $key=>$value)
                     {
                         if($key==0)
                         {
-                        echo $value->pillaraveragebyuserid;
+                        echo $value->pillaraveragevalues;
                         }
                         else
                         {
-                        echo ",".$value->pillaraveragebyuserid;
+                        echo ",".$value->pillaraveragevalues;
                         }
                     }
                     ?>

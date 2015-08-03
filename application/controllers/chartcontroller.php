@@ -2,6 +2,39 @@
 if ( ! defined("BASEPATH")) exit("No direct script access allowed");
 class Chartcontroller extends CI_Controller 
 {
+    
+    
+    public function barchartjsononhrdashboaard()
+    {
+        $pillarsdata=$this->menu_model->drawpillarjsononhrdashboaard();
+        $data['weightgraph']=$pillarsdata;
+//        print_r($pillarsdata);
+//        $pillarsdataofteam=$this->menu_model->getweightofpillarsbyteam($userid);
+//        $data['weightgraphbyteam']=$pillarsdataofteam;
+        
+        $this->load->view('hrchartondashboard',$data);
+        
+    }
+    
+    public function barchartjson()
+    {
+//        $userid=7;
+        $check=$this->input->get_post('check');
+        $departmentid=$this->input->get_post('departmentid');
+        $teamid=$this->input->get_post('teamid');
+        $organization=$this->input->get_post('organization');
+        $branchid=$this->input->get_post('branchid');
+        
+        $pillarsdata=$this->menu_model->drawpillarjson($check,$departmentid,$teamid,$organization,$branchid);
+        $data['weightgraph']=$pillarsdata;
+        print_r($pillarsdata);
+//        $pillarsdataofteam=$this->menu_model->getweightofpillarsbyteam($userid);
+//        $data['weightgraphbyteam']=$pillarsdataofteam;
+        
+        $this->load->view('hrchart',$data);
+        
+    }
+    
  public function forgotpassword()
     {
         
@@ -43,7 +76,7 @@ class Chartcontroller extends CI_Controller
 //        $pillarsdataofteam=$this->menu_model->getweightofpillarsbyteam($userid);
 //        $data['weightgraphbyteam']=$pillarsdataofteam;
         
-//        $this->load->view('chartshow',$data);
+        $this->load->view('chartshow',$data);
         
 //        $query=$this->db->query("select * from `category` LIMIT 0,10")->result();
 ////    print_r($query);
