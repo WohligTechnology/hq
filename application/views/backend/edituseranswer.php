@@ -29,6 +29,12 @@ Useranswer Details
 <?php echo form_dropdown("option",$option,set_value('option',$before->option),"class='chzn-select form-control'");?>
 </div>
 </div>
+    <div class=" form-group">
+<label class="col-sm-2 control-label" for="normal-field">Test</label>
+<div class="col-sm-4">
+<?php echo form_dropdown("test",$test,set_value('test',$before->test),"class='chzn-select form-control'");?>
+</div>
+</div>
 <div class="form-group">
 <label class="col-sm-2 control-label" for="normal-field">Order</label>
 <div class="col-sm-4">

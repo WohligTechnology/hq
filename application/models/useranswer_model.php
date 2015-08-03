@@ -3,9 +3,9 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class useranswer_model extends CI_Model
 {
-public function create($user,$pillar,$question,$option,$order)
+public function create($user,$pillar,$question,$option,$order,$test)
 {
-$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order);
+$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order,"test" => $test);
 $query=$this->db->insert( "hq_useranswer", $data );
 $id=$this->db->insert_id();
 if(!$query)
@@ -24,9 +24,9 @@ $this->db->where("id",$id);
 $query=$this->db->get("hq_useranswer")->row();
 return $query;
 }
-public function edit($id,$user,$pillar,$question,$option,$order,$timestamp)
+public function edit($id,$user,$pillar,$question,$option,$order,$timestamp,$test)
 {
-$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order,"timestamp" => $timestamp);
+$data=array("user" => $user,"pillar" => $pillar,"question" => $question,"option" => $option,"order" => $order,"timestamp" => $timestamp,"test" => $test);
 $this->db->where( "id", $id );
 $query=$this->db->update( "hq_useranswer", $data );
 return 1;

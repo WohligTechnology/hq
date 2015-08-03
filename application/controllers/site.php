@@ -20,17 +20,32 @@ class Site extends CI_Controller
 		if(!in_array($accesslevel,$access))
 			redirect( base_url() . 'index.php/site?alerterror=You do not have access to this page. ', 'refresh' );
 	}
-	public function index()
+    public function index()
 	{
-		$access = array("1","2");
+		$access = array("1","2","3");
 		$this->checkaccess($access);
+        if($this->session->userdata('accesslevel')==3)
+        {
+        $data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+        $data[ 'check' ] =$this->user_model->getcheckdropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'team' ] =$this->user_model->getteamdropdown();
+		$data[ 'page' ] = 'hrdashboard';
+		$data[ 'title' ] = 'Welcome';
+		$this->load->view( 'template', $data );	
+        }
+        else
+        {
 		$data[ 'page' ] = 'dashboard';
 		$data[ 'title' ] = 'Welcome';
 		$this->load->view( 'template', $data );	
+        }
+        
 	}
+    
 	public function createuser()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
@@ -49,7 +64,7 @@ class Site extends CI_Controller
 	}
 	function createusersubmit()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('name','Name','trim|required|max_length[30]');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email|is_unique[user.email]');
@@ -148,7 +163,7 @@ class Site extends CI_Controller
 	}
     function viewusers()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$data['page']='viewusers';
         $data['base_url'] = site_url("site/viewusersjson");
@@ -158,9 +173,13 @@ class Site extends CI_Controller
 	} 
     function viewusersjson()
 	{
-		$access = array("1");
+		$access = array("1","3","2");
 		$this->checkaccess($access);
         
+        $where=" 1";
+        if($this->session->userdata('accesslevel')==3){
+             $where=" `user`.`accesslevel`>2";
+        }
         
         $elements=array();
         $elements[0]=new stdClass();
@@ -229,7 +248,7 @@ class Site extends CI_Controller
             $orderorder="ASC";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE $where");
         
 		$this->load->view("json",$data);
 	} 
@@ -237,7 +256,7 @@ class Site extends CI_Controller
     
 	function edituser()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
 		$data['accesslevel']=$this->user_model->getaccesslevels();
@@ -257,7 +276,7 @@ class Site extends CI_Controller
 	}
 	function editusersubmit()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		
 		$this->form_validation->set_rules('name','Name','trim|required|max_length[30]');
@@ -372,7 +391,7 @@ class Site extends CI_Controller
 	
 	function deleteuser()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$this->user_model->deleteuser($this->input->get('id'));
 //		$data['table']=$this->user_model->viewusers();
@@ -383,7 +402,7 @@ class Site extends CI_Controller
 	}
 	function changeuserstatus()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
 		$this->user_model->changestatus($this->input->get('id'));
 		$data['table']=$this->user_model->viewusers();
@@ -397,7 +416,7 @@ class Site extends CI_Controller
     
     public function viewbranch()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewbranch";
 $data["base_url"]=site_url("site/viewbranchjson");
@@ -452,7 +471,7 @@ $this->load->view("json",$data);
 
 public function createbranch()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createbranch";
 $data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
@@ -461,7 +480,7 @@ $this->load->view("template",$data);
 }
 public function createbranchsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("language","Language","trim");
 $this->form_validation->set_rules("name","Name","trim");
@@ -491,7 +510,7 @@ $this->load->view("redirect",$data);
 }
 public function editbranch()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editbranch";
 $data["title"]="Edit branch";
@@ -500,7 +519,7 @@ $this->load->view("template",$data);
 }
 public function editbranchsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("language","Language","trim");
@@ -532,7 +551,7 @@ $this->load->view("redirect",$data);
 }
 public function deletebranch()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->branch_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewbranch";
@@ -540,7 +559,7 @@ $this->load->view("redirect",$data);
 }
 public function viewdepartment()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewdepartment";
 $data["base_url"]=site_url("site/viewdepartmentjson");
@@ -585,7 +604,7 @@ $this->load->view("json",$data);
 
 public function createdepartment()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createdepartment";
 $data["title"]="Create department";
@@ -593,7 +612,7 @@ $this->load->view("template",$data);
 }
 public function createdepartmentsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("name","Name","trim");
 $this->form_validation->set_rules("deptid","Dept id","trim");
@@ -618,7 +637,7 @@ $this->load->view("redirect",$data);
 }
 public function editdepartment()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editdepartment";
 $data["title"]="Edit department";
@@ -627,7 +646,7 @@ $this->load->view("template",$data);
 }
 public function editdepartmentsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("name","Name","trim");
@@ -655,7 +674,7 @@ $this->load->view("redirect",$data);
 }
 public function deletedepartment()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->department_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewdepartment";
@@ -665,7 +684,7 @@ $this->load->view("redirect",$data);
 //TEAM STARTS	
 	public function viewteam()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewteam";
 $data["base_url"]=site_url("site/viewteamjson");
@@ -710,7 +729,7 @@ $this->load->view("json",$data);
 
 public function createteam()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createteam";
 $data["title"]="Create team";
@@ -718,7 +737,7 @@ $this->load->view("template",$data);
 }
 public function createteamsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("name","Name","trim");
 $this->form_validation->set_rules("teamid","Team id","trim");
@@ -743,7 +762,7 @@ $this->load->view("redirect",$data);
 }
 public function editteam()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editteam";
 $data["title"]="Edit team";
@@ -752,7 +771,7 @@ $this->load->view("template",$data);
 }
 public function editteamsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("name","Name","trim");
@@ -780,7 +799,7 @@ $this->load->view("redirect",$data);
 }
 public function deleteteam()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->team_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewteam";
@@ -788,7 +807,7 @@ $this->load->view("redirect",$data);
 }
 public function viewdesignation()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewdesignation";
 $data["base_url"]=site_url("site/viewdesignationjson");
@@ -833,7 +852,7 @@ $this->load->view("json",$data);
 
 public function createdesignation()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createdesignation";
 	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
@@ -842,7 +861,7 @@ $this->load->view("template",$data);
 }
 public function createdesignationsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("name","Name","trim");
 $this->form_validation->set_rules("language","Language","trim");
@@ -868,7 +887,7 @@ $this->load->view("redirect",$data);
 }
 public function editdesignation()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editdesignation";
 	$data[ 'language' ] =$this->user_model->getlanguagetypedropdown();
@@ -878,7 +897,7 @@ $this->load->view("template",$data);
 }
 public function editdesignationsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("name","Name","trim");
@@ -907,7 +926,7 @@ $this->load->view("redirect",$data);
 }
 public function deletedesignation()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->designation_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewdesignation";
@@ -915,7 +934,7 @@ $this->load->view("redirect",$data);
 }
 public function viewpillar()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewpillar";
 $data["base_url"]=site_url("site/viewpillarjson");
@@ -965,7 +984,7 @@ $this->load->view("json",$data);
 
 public function createpillar()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createpillar";
 $data["title"]="Create pillar";
@@ -973,7 +992,7 @@ $this->load->view("template",$data);
 }
 public function createpillarsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("name","Name","trim");
 $this->form_validation->set_rules("weight","Weight","trim");
@@ -1000,7 +1019,7 @@ $this->load->view("redirect",$data);
 }
 public function editpillar()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editpillar";
 $data["title"]="Edit pillar";
@@ -1009,7 +1028,7 @@ $this->load->view("template",$data);
 }
 public function editpillarsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("name","Name","trim");
@@ -1039,7 +1058,7 @@ $this->load->view("redirect",$data);
 }
 public function deletepillar()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->pillar_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewpillar";
@@ -1047,7 +1066,7 @@ $this->load->view("redirect",$data);
 }
 public function viewquestion()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewquestion";
 $data["base_url"]=site_url("site/viewquestionjson");
@@ -1107,7 +1126,7 @@ $this->load->view("json",$data);
 
 public function createquestion()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createquestion";
 $data["pillar"]=$this->pillar_model->getpillardropdown();
@@ -1117,7 +1136,7 @@ $this->load->view("template",$data);
 }
 public function createquestionsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("pillar","Pillar","trim");
 $this->form_validation->set_rules("noofans","Number of answer","trim");
@@ -1151,7 +1170,7 @@ $this->load->view("redirect",$data);
 }
 public function editquestion()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editquestion";
 $data["pillar"]=$this->pillar_model->getpillardropdown();
@@ -1162,7 +1181,7 @@ $this->load->view("template",$data);
 }
 public function editquestionsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("pillar","Pillar","trim");
@@ -1206,7 +1225,7 @@ $this->load->view("redirect",$data);
 }
 public function viewoptions()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewoptions";
 	
@@ -1282,7 +1301,7 @@ $this->load->view("json",$data);
 
 public function createoptions()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createoptions";
 $data["question"]=$this->question_model->getquestiondropdown();
@@ -1292,7 +1311,7 @@ $this->load->view("template",$data);
 }
 public function createoptionssubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("question","Question","trim");
 $this->form_validation->set_rules("representation","Representation","trim");
@@ -1365,7 +1384,7 @@ $this->load->view("redirect",$data);
 }
 public function editoptions()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editoptions";
 $data["representation"]=$this->options_model->getrepresentationdropdown();
@@ -1376,7 +1395,7 @@ $this->load->view("template",$data);
 }
 public function editoptionssubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("question","Question","trim");
@@ -1459,7 +1478,7 @@ $this->load->view("redirect",$data);
 }
 public function deleteoptions()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->options_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewoptions";
@@ -1467,7 +1486,7 @@ $this->load->view("redirect",$data);
 }
 public function viewuseranswer()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="viewuseranswer";
 $data["base_url"]=site_url("site/viewuseranswerjson");
@@ -1532,19 +1551,20 @@ $this->load->view("json",$data);
 
 public function createuseranswer()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="createuseranswer";
 $data["user"]=$this->user_model->getuserdropdown();
 $data["question"]=$this->question_model->getquestiondropdown();
 $data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["option"]=$this->options_model->getoptionsdropdown();
+$data["test"]=$this->test_model->gettestdropdown();
 $data["title"]="Create useranswer";
 $this->load->view("template",$data);
 }
 public function createuseranswersubmit() 
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->form_validation->set_rules("user","User","trim");
 $this->form_validation->set_rules("pillar","Pillar","trim");
@@ -1560,6 +1580,7 @@ $data["user"]=$this->user_model->getuserdropdown();
 $data["question"]=$this->question_model->getquestiondropdown();
 $data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["option"]=$this->options_model->getoptionsdropdown();
+$data["test"]=$this->test_model->gettestdropdown();
 $data["title"]="Create useranswer";
 $this->load->view("template",$data);
 }
@@ -1571,7 +1592,8 @@ $question=$this->input->get_post("question");
 $option=$this->input->get_post("option");
 $order=$this->input->get_post("order");
 //$timestamp=$this->input->get_post("timestamp");
-if($this->useranswer_model->create($user,$pillar,$question,$option,$order)==0)
+    $test=$this->input->get_post("test");
+if($this->useranswer_model->create($user,$pillar,$question,$option,$order,$test)==0)
 $data["alerterror"]="New useranswer could not be created.";
 else
 $data["alertsuccess"]="useranswer created Successfully.";
@@ -1581,20 +1603,21 @@ $this->load->view("redirect",$data);
 }
 public function edituseranswer()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="edituseranswer";
 $data["user"]=$this->user_model->getuserdropdown();
 $data["question"]=$this->question_model->getquestiondropdown();
 $data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["option"]=$this->options_model->getoptionsdropdown();
+$data["test"]=$this->test_model->gettestdropdown();
 $data["title"]="Edit useranswer";
 $data["before"]=$this->useranswer_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
 }
 public function edituseranswersubmit()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("user","User","trim");
@@ -1611,6 +1634,7 @@ $data["user"]=$this->user_model->getuserdropdown();
 $data["question"]=$this->question_model->getquestiondropdown();
 $data["pillar"]=$this->pillar_model->getpillardropdown();
 $data["option"]=$this->options_model->getoptionsdropdown();
+$data["test"]=$this->test_model->gettestdropdown();
 $data["title"]="Edit useranswer";
 $data["before"]=$this->useranswer_model->beforeedit($this->input->get("id"));
 $this->load->view("template",$data);
@@ -1624,7 +1648,8 @@ $question=$this->input->get_post("question");
 $option=$this->input->get_post("option");
 $order=$this->input->get_post("order");
 $timestamp=$this->input->get_post("timestamp");
-if($this->useranswer_model->edit($id,$user,$pillar,$question,$option,$order,$timestamp)==0)
+$test=$this->input->get_post("test");
+if($this->useranswer_model->edit($id,$user,$pillar,$question,$option,$order,$timestamp,$test)==0)
 $data["alerterror"]="New useranswer could not be Updated.";
 else
 $data["alertsuccess"]="useranswer Updated Successfully.";
@@ -1634,7 +1659,7 @@ $this->load->view("redirect",$data);
 }
 public function deleteuseranswer()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->useranswer_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewuseranswer";
@@ -1642,7 +1667,7 @@ $this->load->view("redirect",$data);
 }
 public function viewuserpillar()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="viewuserpillar";
 $data["base_url"]=site_url("site/viewuserpillarjson");
@@ -1692,7 +1717,7 @@ $this->load->view("json",$data);
 
 public function createuserpillar()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="createuserpillar";
 $data["user"]=$this->user_model->getuserdropdown();
@@ -1702,7 +1727,7 @@ $this->load->view("template",$data);
 }
 public function createuserpillarsubmit() 
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->form_validation->set_rules("user","User","trim");
 $this->form_validation->set_rules("pillar","Pillar","trim");
@@ -1731,7 +1756,7 @@ $this->load->view("redirect",$data);
 }
 public function edituserpillar()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $data["page"]="edituserpillar";
 $data["title"]="Edit userpillar";
@@ -1742,7 +1767,7 @@ $this->load->view("template",$data);
 }
 public function edituserpillarsubmit()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("user","User","trim");
@@ -1774,7 +1799,7 @@ $this->load->view("redirect",$data);
 }
 public function deleteuserpillar()
 {
-$access=array("1");
+$access=array("1","2");
 $this->checkaccess($access);
 $this->userpillar_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewuserpillar";
@@ -1782,7 +1807,7 @@ $this->load->view("redirect",$data);
 }
 public function viewcontent()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewcontent";
 $data["base_url"]=site_url("site/viewcontentjson");
@@ -1837,7 +1862,7 @@ $this->load->view("json",$data);
 
 public function createcontent()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="createcontent";
 $data["pillar"]=$this->pillar_model->getpillardropdown();
@@ -1846,7 +1871,7 @@ $this->load->view("template",$data);
 }
 public function createcontentsubmit() 
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("pillar","Pillar","trim");
 $this->form_validation->set_rules("image","Image","trim");
@@ -1910,7 +1935,7 @@ $this->load->view("redirect",$data);
 }
 public function editcontent()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="editcontent";
 $data["title"]="Edit content";
@@ -1920,7 +1945,7 @@ $this->load->view("template",$data);
 }
 public function editcontentsubmit()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->form_validation->set_rules("id","ID","trim");
 $this->form_validation->set_rules("pillar","Pillar","trim");
@@ -1994,12 +2019,408 @@ $this->load->view("redirect",$data);
 }
 public function deletecontent()
 {
-$access=array("1");
+$access=array("1","2","3");
 $this->checkaccess($access);
 $this->content_model->delete($this->input->get("id"));
 $data["redirect"]="site/viewcontent";
 $this->load->view("redirect",$data);
 }
+    
+    //TEST
+    
+    
+    public function createtest()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'team' ] =$this->user_model->getteamdropdown();
+		$data[ 'schedule' ] =$this->user_model->getscheduledropdown();
+             $data[ 'check' ] =$this->user_model->getcheckdropdown();
+		$data[ 'page' ] = 'createtest';
+		$data[ 'title' ] = 'Create Test';
+		$this->load->view( 'template', $data );	
+	}
+	function createtestsubmit()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+            $name=$this->input->post('name');
+            $schedule=$this->input->post('schedule');
+            $units=$this->input->post('units');
+            $startdate=$this->input->post('startdate');
+            $designation=$this->input->post('designation');
+            $department=$this->input->post('department');
+            $branch=$this->input->post('branch');
+            $team=$this->input->post('team');
+            $organization=$this->input->post('organization');
+			if($this->test_model->create($name,$schedule,$units,$startdate,$designation,$department,$branch,$team,$organization)==0)
+			$data['alerterror']="New test could not be created.";
+			else
+			$data['alertsuccess']="Test created Successfully.";
+			$data['redirect']="site/viewtest";
+			$this->load->view("redirect",$data);
+		
+	}
+    function viewtest()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$data['page']='viewtest';
+        $data['base_url'] = site_url("site/viewtestjson");
+        
+		$data['title']='View test';
+		$this->load->view('template',$data);
+	} 
+    function viewtestjson()
+	{
+		$access = array("1","3","2");
+		$this->checkaccess($access);
+       
+        
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`test`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`test`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`test`.`schedule`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Schedule";
+        $elements[2]->alias="schedule";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`test`.`startdate`";
+        $elements[3]->sort="1";
+        $elements[3]->header="Startdate";
+        $elements[3]->alias="startdate";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`test`.`timestamp`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Timestamp";
+        $elements[4]->alias="timestamp"; 
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`test`.`units`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Units";
+        $elements[5]->alias="units";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+       
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `test`");
+        
+		$this->load->view("json",$data);
+	} 
+    
+    
+	function edittest()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$data[ 'designation' ] =$this->user_model->getdesignationtypedropdown();
+		$data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();
+		$data[ 'branch' ] =$this->user_model->getbranchtypedropdown();
+		$data[ 'team' ] =$this->user_model->getteamdropdown();
+		$data[ 'schedule' ] =$this->user_model->getscheduledropdown();
+             $data[ 'check' ] =$this->user_model->getcheckdropdown();
+		$data['before']=$this->test_model->beforeedit($this->input->get('id'));
+		$data['page']='edittest';
+		$data['title']='Edit test';
+		$this->load->view('template',$data);
+	}
+	function edittestsubmit()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+            $id=$this->input->get_post('id');
+            $name=$this->input->post('name');
+            $schedule=$this->input->post('schedule');
+            $units=$this->input->post('units');
+            $startdate=$this->input->post('startdate');
+            $designation=$this->input->post('designation');
+            $department=$this->input->post('department');
+            $branch=$this->input->post('branch');
+            $team=$this->input->post('team');
+            $organization=$this->input->post('organization');
+            $timestamp=$this->input->post('timestamp');
+           
+			if($this->test_model->edit($id,$name,$schedule,$units,$startdate,$designation,$department,$branch,$team,$organization,$timestamp)==0)
+			$data['alerterror']="Test Editing was unsuccesful";
+			else
+			$data['alertsuccess']="Test edited Successfully.";
+		
+			$data['redirect']="site/viewtest";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		
+	}
+	
+	function deletetest()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$this->test_model->delete($this->input->get('id'));
+		$data['alertsuccess']="Test Deleted Successfully";
+		$data['redirect']="site/viewtest";
+		$this->load->view("redirect",$data);
+	}
+    
+    
+    
+    // CREATE TEST QUESTION
+    
+    
+    public function viewtestquestion()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="viewtestquestion";
+        
+$data["base_url"]=site_url("site/viewtestquestionjson");
+$data["title"]="View testquestion";
+$this->load->view("template",$data);
+}
+function viewtestquestionjson()
+{
+$elements=array();
+$elements[0]=new stdClass();
+$elements[0]->field="`testquestion`.`id`";
+$elements[0]->sort="1";
+$elements[0]->header="ID";
+$elements[0]->alias="id";
+$elements[1]=new stdClass();
+$elements[1]->field="`testquestion`.`test`";
+$elements[1]->sort="1";
+$elements[1]->header="test";
+$elements[1]->alias="test";
+$elements[2]=new stdClass();
+$elements[2]->field="`testquestion`.`question`";
+$elements[2]->sort="1";
+$elements[2]->header="question";
+$elements[2]->alias="question";
+$search=$this->input->get_post("search");
+$pageno=$this->input->get_post("pageno");
+$orderby=$this->input->get_post("orderby");
+$orderorder=$this->input->get_post("orderorder");
+$maxrow=$this->input->get_post("maxrow");
+if($maxrow=="")
+{
+$maxrow=20;
+}
+if($orderby=="")
+{
+$orderby="id";
+$orderorder="ASC";
+}
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testquestion`");
+$this->load->view("json",$data);
+}
+
+public function createtestquestion()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="createtestquestion";
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["test"]=$this->test_model->gettestdropdown();
+$data["title"]="Create testquestion";
+$this->load->view("template",$data);
+}
+public function createtestquestionsubmit() 
+{
+
+$test=$this->input->get_post("test");
+$question=$this->input->get_post("question");
+if($this->testquestion_model->create($test,$question)==0)
+$data["alerterror"]="New testquestion could not be created.";
+else
+$data["alertsuccess"]="testquestion created Successfully.";
+$data["redirect"]="site/viewtestquestion";
+$this->load->view("redirect",$data);
+
+}
+public function edittestquestion()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="edittestquestion";
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["test"]=$this->test_model->gettestdropdown();
+$data["title"]="Edit testquestion";
+$data["before"]=$this->testquestion_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+public function edittestquestionsubmit()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$id=$this->input->get_post("id");
+$test=$this->input->get_post("test");
+$question=$this->input->get_post("question");
+if($this->testquestion_model->edit($id,$test,$question)==0)
+$data["alerterror"]="New testquestion could not be Updated.";
+else
+$data["alertsuccess"]="testquestion Updated Successfully.";
+$data["redirect"]="site/viewtestquestion";
+$this->load->view("redirect",$data);
+}
+
+public function deletetestquestion()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$this->testquestion_model->delete($this->input->get("id"));
+$data["redirect"]="site/viewtestquestion";
+$this->load->view("redirect",$data);
+}
+	
+    
+    // TEST PILLAR EXPECTED
+    
+    
+    
+    
+    public function viewtestpillarexpected()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="viewtestpillarexpected";
+        
+$data["base_url"]=site_url("site/viewtestpillarexpectedjson");
+$data["title"]="View testquestion";
+$this->load->view("template",$data);
+}
+function viewtestpillarexpectedjson()
+{
+$elements=array();
+$elements[0]=new stdClass();
+$elements[0]->field="`testpillarexpected`.`id`";
+$elements[0]->sort="1";
+$elements[0]->header="ID";
+$elements[0]->alias="id";
+$elements[1]=new stdClass();
+$elements[1]->field="`testpillarexpected`.`test`";
+$elements[1]->sort="1";
+$elements[1]->header="test";
+$elements[1]->alias="test";
+$elements[2]=new stdClass();
+$elements[2]->field="`testpillarexpected`.`pillar`";
+$elements[2]->sort="1";
+$elements[2]->header="pillar";
+$elements[2]->alias="pillar";
+    
+$elements[3]=new stdClass();
+$elements[3]->field="`testpillarexpected`.`expectedvalue`";
+$elements[3]->sort="1";
+$elements[3]->header="expectedvalue";
+$elements[3]->alias="expectedvalue";
+$search=$this->input->get_post("search");
+$pageno=$this->input->get_post("pageno");
+$orderby=$this->input->get_post("orderby");
+$orderorder=$this->input->get_post("orderorder");
+$maxrow=$this->input->get_post("maxrow");
+if($maxrow=="")
+{
+$maxrow=20;
+}
+if($orderby=="")
+{
+$orderby="id";
+$orderorder="ASC";
+}
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testpillarexpected`");
+$this->load->view("json",$data);
+}
+
+public function createtestpillarexpected()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="createtestpillarexpected";
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["test"]=$this->test_model->gettestdropdown();
+$data["title"]="Create testpillarexpected";
+$this->load->view("template",$data);
+}
+public function createtestpillarexpectedsubmit() 
+{
+
+$test=$this->input->get_post("test");
+$pillar=$this->input->get_post("pillar");
+$expectedvalue=$this->input->get_post("expectedvalue");
+if($this->testpillarexpected_model->create($test,$pillar,$expectedvalue)==0)
+$data["alerterror"]="New testpillarexpected could not be created.";
+else
+$data["alertsuccess"]="testpillarexpected created Successfully.";
+$data["redirect"]="site/viewtestpillarexpected";
+$this->load->view("redirect",$data);
+
+}
+public function edittestpillarexpected()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$data["page"]="edittestpillarexpected";
+$data["question"]=$this->question_model->getquestiondropdown();
+$data["pillar"]=$this->pillar_model->getpillardropdown();
+$data["test"]=$this->test_model->gettestdropdown();
+$data["title"]="Edit testpillarexpected";
+$data["before"]=$this->department_model->beforeedit($this->input->get("id"));
+$this->load->view("template",$data);
+}
+public function edittestpillarexpectedsubmit()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$id=$this->input->get_post("id");
+$test=$this->input->get_post("test");
+$pillar=$this->input->get_post("pillar");
+$expectedvalue=$this->input->get_post("expectedvalue");
+if($this->testpillarexpected_model->edit($id,$test,$pillar,$expectedvalue)==0)
+$data["alerterror"]="New testpillarexpected could not be Updated.";
+else
+$data["alertsuccess"]="testpillarexpected Updated Successfully.";
+$data["redirect"]="site/viewtestpillarexpected";
+$this->load->view("redirect",$data);
+}
+
+public function deletetestpillarexpected()
+{
+$access=array("1","2","3");
+$this->checkaccess($access);
+$this->testpillarexpected_model->delete($this->input->get("id"));
+$data["redirect"]="site/viewtestpillarexpected";
+$this->load->view("redirect",$data);
+}
+	
 
 }
 ?>

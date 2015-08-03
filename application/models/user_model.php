@@ -10,7 +10,7 @@ class User_model extends CI_Model
 		$password=md5($password);
 		$query ="SELECT `user`.`id`,`user`.`name` as `name`,`email`,`user`.`accesslevel`,`accesslevel`.`name` as `access` FROM `user`
 		INNER JOIN `accesslevel` ON `user`.`accesslevel` = `accesslevel`.`id` 
-		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2) ";
+		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2,3) ";
 		$row =$this->db->query( $query );
 		if ( $row->num_rows() > 0 ) {
 			$row=$row->row();
@@ -165,6 +165,36 @@ class User_model extends CI_Model
 		{
 			$return[$row->id]=$row->name;
 		}
+		
+		return $return;
+	}  
+    public function getcheckdropdown()
+	{
+		
+		$return=array(
+		"0" => "Organization",
+		"1" => "Branch",
+		"2" => "Department",
+		"4" => "Team"
+		);
+		
+		return $return;
+	}
+    public function getscheduledropdown()
+	{
+		
+		$return=array(
+		"0" => "Per Day",
+		"1" => "Per Two Days",
+		"2" => "Per Three Days",
+		"3" => "Per Four Days",
+		"4" => "Per Five Days",
+		"5" => "Per Six Days",
+		"6" => "Per week",
+		"7" => "Per two week",
+		"8" => "Per three week",
+		"9" => "Per month"
+		);
 		
 		return $return;
 	}
