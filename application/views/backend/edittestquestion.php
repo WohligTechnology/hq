@@ -1,32 +1,81 @@
 <section class="panel">
-<header class="panel-heading">
-testquestion Details
-</header>
-<div class="panel-body">
-<form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/edittestquestionsubmit");?>' enctype= 'multipart/form-data'>
-<input type="hidden" id="normal-field" class="form-control" name="id" value="<?php echo set_value('id',$before->id);?>" style="display:none;">
+		    <header class="panel-heading">
+				  Test Questions
+			</header>
+			<div class="panel-body">
+				<form class="form-horizontal row-fluid" method="post" action="<?php echo site_url('site/edittestquestionsubmit');?>" enctype= "multipart/form-data">
+					<div class="form-row control-group row-fluid" >
+						<label class="control-label span3" for="normal-field">ID</label>
+						<div class="controls span9">
+						  <input type="text" id="normal-field" class="row-fluid" name="id" value="<?php echo $this->input->get('id');?>">
+						</div>
+					</div>
+	
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Questions</label>
+						<div class="col-sm-4">
+						 <?php 
+						 foreach($table as $row)
+						 {	 ?>
+								<input type="checkbox" id="inlineCheckbox1" name="question[]" value="<?php echo $row->id; ?>" <?php if(in_array($row->id,$before['selectedquestion'])) echo 'checked'; ?>>&nbsp;<?php echo $row->text; ?> <br>
+					<?php	 }
+						 ?>
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">&nbsp;</label>
+						<div class="col-sm-4">	
+							<button type="submit" class="btn btn-info">Submit</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
 
-<div class=" form-group">
-<label class="col-sm-2 control-label" for="normal-field">Question</label>
-<div class="col-sm-4">
-<?php echo form_dropdown("question",$question,set_value('question',$before->question),"class='chzn-select form-control'");?>
-</div>
-</div>
 
-<div class=" form-group">
-<label class="col-sm-2 control-label" for="normal-field">Test</label>
-<div class="col-sm-4">
-<?php echo form_dropdown("test",$test,set_value('test',$before->test),"class='chzn-select form-control'");?>
-</div>
-</div>
 
-<div class="form-group">
-<label class="col-sm-2 control-label" for="normal-field">&nbsp;</label>
-<div class="col-sm-4">
-<button type="submit" class="btn btn-primary">Save</button>
-<a href='<?php echo site_url("site/viewtestquestion"); ?>' class='btn btn-secondary'>Cancel</a>
+
+
+
+
+
+
+<!--
+<div class="row" style="padding:1% 0">
+<div class="col-md-12">
+<a class="btn btn-primary pull-right"  href="<?php echo site_url("site/createtestquestion"); ?>"><i class="icon-plus"></i>Create </a> &nbsp; 
 </div>
 </div>
+<div class="row">
+<div class="col-lg-12">
+<section class="panel">
+
+<div class="drawchintantable">
+<?php $this->chintantable->createsearch("test question List");?>
+    <form>
+<thead>
+<tr>
+
+</tr>
+</thead>
+<tbody>
+</tbody>
 </form>
+<?php $this->chintantable->createpagination();?>
 </div>
 </section>
+-->
+<!--
+<script>
+function drawtable(resultrow) {
+return "<tr><td>" + resultrow.question + "</td>><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/edittestquestion?id=');?>"+resultrow.id+"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deletetestquestion?id='); ?>"+resultrow.id+"'><i class='icon-trash '></i></a></td></tr>";
+}
+generatejquery("<?php echo $base_url;?>");
+</script>
+-->
+<!--
+</div>
+</div>
+-->

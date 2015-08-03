@@ -2273,17 +2273,20 @@ $data["redirect"]="site/viewtestquestion";
 $this->load->view("redirect",$data);
 
 }
-public function edittestquestion()
-{
-$access=array("1","2","3");
-$this->checkaccess($access);
-$data["page"]="edittestquestion";
-$data["question"]=$this->question_model->getquestiondropdown();
-$data["test"]=$this->test_model->gettestdropdown();
-$data["title"]="Edit testquestion";
-$data["before"]=$this->testquestion_model->beforeedit($this->input->get("id"));
-$this->load->view("template",$data);
-}
+    public function edittestquestion()
+    {
+        $access=array("1","2","3");
+        $this->checkaccess($access);
+        $testid=$this->input->get('id');
+        $data["page"]="edittestquestion";
+        
+      $data["table"]=$this->testquestion_model->getallquestion();
+//        $data["question"]=$this->question_model->getquestiondropdown();
+        $data["test"]=$this->test_model->gettestdropdown();
+        $data["title"]="Edit testquestion";
+        $data["before"]=$this->testquestion_model->beforeedit($this->input->get("id"));
+        $this->load->view("template",$data);
+    }
 public function edittestquestionsubmit()
 {
 $access=array("1","2","3");
@@ -2291,7 +2294,7 @@ $this->checkaccess($access);
 $id=$this->input->get_post("id");
 $test=$this->input->get_post("test");
 $question=$this->input->get_post("question");
-if($this->testquestion_model->edit($id,$test,$question)==0)
+if($this->testquestion_model->edittestquestion($id,$test,$question)==0)
 $data["alerterror"]="New testquestion could not be Updated.";
 else
 $data["alertsuccess"]="testquestion Updated Successfully.";
