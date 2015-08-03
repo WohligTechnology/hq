@@ -2152,8 +2152,9 @@ $this->load->view("redirect",$data);
              $data[ 'check' ] =$this->user_model->getcheckdropdown();
 		$data['before']=$this->test_model->beforeedit($this->input->get('id'));
 		$data['page']='edittest';
+		$data['page2']='block/testblock';
 		$data['title']='Edit test';
-		$this->load->view('template',$data);
+		$this->load->view('templatewith2',$data);
 	}
 	function edittestsubmit()
 	{
@@ -2203,13 +2204,14 @@ $this->load->view("redirect",$data);
 $access=array("1","2","3");
 $this->checkaccess($access);
 $data["page"]="viewtestquestion";
-        
-$data["base_url"]=site_url("site/viewtestquestionjson");
+$data["table"]=$this->testquestion_model->getallquestion();
+$data["base_url"]=site_url("site/viewtestquestionjson?id=".$this->input->get('id'));
 $data["title"]="View testquestion";
 $this->load->view("template",$data);
 }
 function viewtestquestionjson()
 {
+    $id=$this->input->get('id');
 $elements=array();
 $elements[0]=new stdClass();
 $elements[0]->field="`testquestion`.`id`";
@@ -2222,9 +2224,9 @@ $elements[1]->sort="1";
 $elements[1]->header="test";
 $elements[1]->alias="test";
 $elements[2]=new stdClass();
-$elements[2]->field="`testquestion`.`question`";
+$elements[2]->field="`hq_question`.`text`";
 $elements[2]->sort="1";
-$elements[2]->header="question";
+$elements[2]->header="Question";
 $elements[2]->alias="question";
 $search=$this->input->get_post("search");
 $pageno=$this->input->get_post("pageno");
@@ -2240,7 +2242,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testquestion`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testquestion` LEFT OUTER JOIN `hq_question` ON `hq_question`.`id`=`testquestion`.`question`","WHERE `testquestion`.`test`='$id'");
 $this->load->view("json",$data);
 }
 

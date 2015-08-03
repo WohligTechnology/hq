@@ -32,5 +32,9 @@ public function delete($id)
 $query=$this->db->query("DELETE FROM `testquestion` WHERE `id`='$id'");
 return $query;
 }
+    public function getallquestion(){
+    $query=$this->db->query("SELECT * FROM `testquestion`")->result();
+return $query;
+    }
 }
 ?>

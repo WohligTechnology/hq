@@ -13,7 +13,7 @@ testquestion Details
 </div>
 </div>
 
-    <div class=" form-group">
+<div class=" form-group">
 <label class="col-sm-2 control-label" for="normal-field">Test</label>
 <div class="col-sm-4">
 <?php echo form_dropdown("test",$test,set_value('test',$before->test),"class='chzn-select form-control'");?>
