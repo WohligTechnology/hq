@@ -151,5 +151,129 @@ class Menu_model extends CI_Model
 		//print_r($url);
 		return $url;
 	}
+    
+    function sendquestiontousers($questionid)
+    {
+        $allusers=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=4")->result();
+        foreach($allusers as $user)
+        {
+            $userid=$user->id;
+            $email=$user->email;
+            $hashvalue=base64_encode ($userid."&hq");
+            $link="<a href='http://www.localhost/hq/index.php/user/ghghghh/$hashvalue'>Click here </a>";
+               
+            $this->load->library('email');
+            $this->email->from('dhavalwohlig@gmail.com', 'HQ');
+            $this->email->to($email);
+            $this->email->subject('HQ');   
+
+            $message = "<html>
+
+                            <body>
+                                <div style='text-align:center;   width: 50%; margin: 0 auto;'>
+                                    <h4 style='font-size:1.5em;padding-bottom: 5px;color: #e82a96;'>HQ</h4>
+                                    <p style='font-size: 1em;padding-bottom: 10px;'>Click Link To Answer:</p>
+                                    <p style='font-size: 1em;padding-bottom: 10px;'>$link</p>
+                                </div>
+                                <div style='text-align:center;position: relative;'>
+                                    <p style=' position: absolute; top: 8%;left: 50%; transform: translatex(-50%); font-size: 1em;margin: 0; letter-spacing:2px; font-weight: bold;'>
+                                        Thank You
+                                    </p>
+                                </div>
+                            </body>
+
+                        </html>";
+            $this->email->message($message);
+            $this->email->send();
+        }
+    }
+    
+    function getweightofpillarsbyuser($userid)
+    {
+        $query=$this->db->query("SELECT * FROM `hq_pillar` ORDER BY `order` ASC")->result();
+        foreach($query as $row)
+        {
+			$pillarid = $row->id;
+			$pillaraveragebyuserid=$this->db->query("SELECT IFNULL(SUM(`hq_options`.`weight`),0) AS `totalweight`
+FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option`
+			WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`user`='$userid'")->row();
+            $row->pillaraveragebyuserid=$pillaraveragebyuserid->totalweight;
+        }
+        
+        $teamquery=$this->db->query("SELECT * FROM `user` WHERE `id`='$userid'")->row();
+        $teamid=$teamquery->team;
+        $allteamusers=$this->db->query("SELECT * FROM `user` WHERE `team`='$teamid'")->result();
+        $totalusersinteam=count($allteamusers);
+        
+        $alluseridsofteam="(";
+        foreach($allteamusers as $key=>$value)
+        {
+            if($key==0)
+            {
+                $alluseridsofteam.=$value->id;
+            }
+            else
+            {
+                $alluseridsofteam.=",".$value->id;
+            }
+        }
+        $alluseridsofteam=")";
+        
+        foreach($query as $row)
+        {
+			$pillarid = $row->id;
+			$pillaraveragebyteam=$this->db->query("SELECT IFNULL(SUM(`hq_options`.`weight`),0) AS `totalweight`
+FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option`  LEFT OUTER JOIN `user` ON `user`.`id`=`hq_useranswer`.`user`
+			WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`user` IN $alluseridsofteam ")->row();
+            $totalweight=($pillaraveragebyteam->totalweight)/$totalusersinteam;
+            $row->pillaraveragebyteam=$totalweight;
+        }
+        
+        
+        $allorganizationusers=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=4")->result();
+        $totalusersinorganization=count($allorganizationusers);
+        
+        $alluseridsoforganization="(";
+        foreach($allorganizationusers as $key=>$value)
+        {
+            if($key==0)
+            {
+                $alluseridsoforganization.=$value->id;
+            }
+            else
+            {
+                $alluseridsoforganization.=",".$value->id;
+            }
+        }
+        $alluseridsoforganization=")";
+        
+        
+        foreach($query as $row)
+        {
+			$pillarid = $row->id;
+			$pillaraveragebyorganization=$this->db->query("SELECT IFNULL(SUM(`hq_options`.`weight`),0) AS `totalweight`
+FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option`  LEFT OUTER JOIN `user` ON `user`.`id`=`hq_useranswer`.`user`
+			WHERE `hq_useranswer`.`pillar`='$pillarid'")->row();
+            $totalweight=($pillaraveragebyorganization->totalweight)/$totalusersinorganization;
+            $row->pillaraveragebyorganization=$totalweight;
+        }
+        return $query;
+    }
+    
+//    function getweightofpillarsbyteam($userid)
+//    {
+//        $teamquery=$this->db->query("SELECT * FROM `user` WHERE `id`='$userid'")->row();
+//        $teamid=$teamquery->team;
+//        $query=$this->db->query("SELECT * FROM `hq_pillar` ORDER BY `order` ASC")->result();
+//        foreach($query as $row)
+//        {
+//			$pillarid = $row->id;
+//			$pillaraveragebyuserid=$this->db->query("SELECT IFNULL(SUM(`hq_options`.`weight`),0) AS `totalweight`
+//FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option`  LEFT OUTER JOIN `user` ON `user`.`id`=`hq_useranswer`.`user`
+//			WHERE `hq_useranswer`.`pillar`='$pillarid' AND `user`.`team`='$teamid'")->row();
+//            $row->pillaraveragebyteam=$pillaraveragebyteam->totalweight;
+//        }
+//        return $query;
+//    }
 }
 ?>
