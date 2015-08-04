@@ -24,6 +24,10 @@ class Site extends CI_Controller
 	{
 		$access = array("1","2","3");
 		$this->checkaccess($access);
+        
+        $pillarsdata=$this->menu_model->drawpillarjsononhrdashboaard();
+        $data['weightgraph']=$pillarsdata;
+        
         if($this->session->userdata('accesslevel')==3)
         {
         $data[ 'department' ] =$this->user_model->getdepartmenttypedropdown();

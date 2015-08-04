@@ -1,54 +1,150 @@
-<div class="row" style="padding:1% 0">
-    <div class="col-md-12">
-        <div class="pull-right">
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <section class="panel">
-            <header class="panel-heading">
-                <b><u>Sort By</u><b>
-</header>
-<div class="panel-body">
-<form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/createdepartmentsubmit");?>' enctype= 'multipart/form-data'>
-<div class="panel-body">
-  <div class="row">
-						<label class="col-sm-1 control-label">Check</label>
-						<div class="col-sm-2">
-							<?php echo form_dropdown( 'check',$check,set_value( 'check'), 'class="chzn-select form-control" 	data-placeholder="Choose a Logintype..."'); ?>
-						</div>
-					
-      <div>
-						<label class="col-sm-1 control-label">Branch</label>
-						<div class="col-sm-2">
-							<?php echo form_dropdown( 'branch',$branch,set_value( 'branch'), 'class="chzn-select form-control" 	data-placeholder="Choose a Logintype..."'); ?>
-						</div>
-					
-      </div>
-	<div>
-						<label class="col-sm-1 control-label">Department</label>
-						<div class="col-sm-2">
-							<?php echo form_dropdown( 'department',$department,set_value( 'department'), 'class="chzn-select form-control" 	data-placeholder="Choose a Logintype..."'); ?>
-						</div>
-					</div>
-  
-   <div>
-						<label class="col-sm-1 control-label">Team</label>
-						<div class="col-sm-2">
-							<?php echo form_dropdown( 'team',$team,set_value( 'team'), 'class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."'); ?>
-						</div>
-					</div>
-    </div>
-<div class="row">
-<label class="col-sm-1 control-label " for="normal-field">&nbsp;</label>
-<div class="col-sm-2 viewspace">
-<button type="submit" class="btn btn-primary">View</button>
-</div>
-</div>
-        
-</form>
-</div>
-</section>
-</div>
-</div>
+<script src="<?php echo base_url('assets/js/jquery-1.8.3.min.js'); ?>" type="text/javascript"></script>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+<!--<div id="container" style="height: 400px"></div>-->
+<div id="nodata" style="display:none;">No Data Found</div>
+
+
+<?php 
+        for($i=0;$i<count($weightgraph);$i++)
+        { 
+        ?>
+<div id="container<?php echo $i; ?>"></div>
+<!--<div id="container1"></div>-->
+<?php } ?>
+
+<script>
+    
+    $(function () {
+        <?php
+if(empty($weightgraph))
+{
+    ?>
+$('#nodata').show();
+        <?php
+}
+        for($i=0;$i<count($weightgraph);$i++)
+        { 
+        ?>
+        $('#container<?php echo $i; ?>').highcharts({
+            credits: {
+                enabled: false
+            },
+            chart: {
+                type: 'column',
+//                options3d: {
+//                    enabled: true,
+//                    alpha: 15,
+//                    beta: 15,
+//                    depth: 50
+//                }
+            },
+            title: {
+                text: 'Pillar-Wise Average of <?php echo $weightgraph[$i][0]->testname;?>'
+            },
+            xAxis: {
+                categories: [
+                <?php
+                    foreach($weightgraph[$i] as $key=>$value)
+                    {
+                        if($key==0)
+                        {
+                        echo "'$value->name'";
+                        }
+                        else
+                        {
+                        echo ","."'$value->name'";
+                        }
+                    }
+                    
+                    ?>
+            ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Score'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Pillar',
+                data: [
+                <?php
+                    foreach($weightgraph[$i] as $key=>$value)
+                    {
+                        if($key==0)
+                        {
+                        echo "$value->weight";
+                        }
+                        else
+                        {
+                        echo ","."$value->weight";
+                        }
+                    }
+                    ?>
+                ]
+
+        }, {
+                name: 'Expected',
+                data: [
+                <?php
+                    foreach($weightgraph[$i] as $key=>$value)
+                    {
+                        if($key==0)
+                        {
+                        echo "$value->testexpectedweight";
+                        }
+                        else
+                        {
+                        echo ","."$value->testexpectedweight";
+                        }
+                    }
+                    ?>
+                ]
+
+        }, {
+                name: 'Actual',
+                data: [
+                <?php
+                    foreach($weightgraph[$i] as $key=>$value)
+                    {
+                        if($key==0)
+                        {
+                        echo $value->pillaraveragevalues;
+                        }
+                        else
+                        {
+                        echo ",".$value->pillaraveragevalues;
+                        }
+                    }
+                    ?>
+                ]
+
+        }]
+        });
+        <?php } ?>
+    });
+    
+   
+</script>
+
+
+<?php //foreach($category as $key=>$val) // { // if($key==0) // { // echo $val; // } // else // { // echo ",".$val; // } // } ?>
+
+

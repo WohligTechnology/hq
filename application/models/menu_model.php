@@ -313,7 +313,7 @@ FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_user
             foreach($query as $row)
             {
                 $pillarid = $row->id;
-                $testexpectedweights=$this->db->query("SELECT `pillar`,`test`,IFNULL(`weight`,0) as `weight`,`test`.`name` as `testname` FROM `testpillerweight` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillerweight`.`test`  WHERE `test`='$testid' AND `piller`='$pillarid'")->row();
+                $testexpectedweights=$this->db->query("SELECT `testpillarexpected`.`pillar`,`testpillarexpected`.`test`,IFNULL(`testpillarexpected`.`expectedvalue`,0) as `weight`,`test`.`name` as `testname` FROM `testpillarexpected` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillarexpected`.`test`  WHERE `test`='$testid' AND `pillar`='$pillarid'")->row();
                 $testexpectedweight=$testexpectedweights->weight;
                 $testname=$testexpectedweights->testname;
                 $pillaraveragevalues=$this->db->query("SELECT IFNULL(AVG(`hq_options`.`weight`),0) AS `totalweight`
@@ -321,7 +321,7 @@ FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_user
                 WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`test`='$testid'")->row();
                 
                 $row->pillaraveragevalues=$pillaraveragevalues->totalweight;
-                $row->testname=$pillaraveragevalues->totalweight;
+                $row->testname=$testname;
                 $row->testexpectedweight=$testexpectedweight;
             }
             array_push($arr,$query);
