@@ -2336,12 +2336,12 @@ $elements[0]->sort="1";
 $elements[0]->header="ID";
 $elements[0]->alias="id";
 $elements[1]=new stdClass();
-$elements[1]->field="`testpillarexpected`.`test`";
+$elements[1]->field="`test`.`name`";
 $elements[1]->sort="1";
 $elements[1]->header="test";
 $elements[1]->alias="test";
 $elements[2]=new stdClass();
-$elements[2]->field="`testpillarexpected`.`pillar`";
+$elements[2]->field="`hq_pillar`.`name`";
 $elements[2]->sort="1";
 $elements[2]->header="pillar";
 $elements[2]->alias="pillar";
@@ -2365,7 +2365,7 @@ if($orderby=="")
 $orderby="id";
 $orderorder="ASC";
 }
-$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testpillarexpected`");
+$data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `testpillarexpected` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`testpillarexpected`.`pillar` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillarexpected`.`test`");
 $this->load->view("json",$data);
 }
 
