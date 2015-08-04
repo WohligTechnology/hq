@@ -2282,9 +2282,10 @@ $this->load->view("redirect",$data);
         
       $data["table"]=$this->testquestion_model->getallquestion();
 //        $data["question"]=$this->question_model->getquestiondropdown();
-        $data["test"]=$this->test_model->gettestdropdown();
+        $data["test"]=$testid;
         $data["title"]="Edit testquestion";
         $data["before"]=$this->testquestion_model->beforeedit($this->input->get("id"));
+//        print_r($data["before"]);
         $this->load->view("template",$data);
     }
 public function edittestquestionsubmit()
@@ -2292,14 +2293,13 @@ public function edittestquestionsubmit()
 $access=array("1","2","3");
 $this->checkaccess($access);
 $id=$this->input->get_post("id");
-$test=$this->input->get_post("test");
 $question=$this->input->get_post("question");
-if($this->testquestion_model->edittestquestion($id,$test,$question)==0)
+if($this->testquestion_model->edittestquestion($id,$question)==0)
 $data["alerterror"]="New testquestion could not be Updated.";
 else
 $data["alertsuccess"]="testquestion Updated Successfully.";
-$data["redirect"]="site/viewtestquestion";
-$this->load->view("redirect",$data);
+$data["redirect"]="site/edittestquestion?id=".$id;
+$this->load->view("redirect2",$data);
 }
 
 public function deletetestquestion()

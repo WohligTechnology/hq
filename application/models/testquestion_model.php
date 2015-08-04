@@ -16,10 +16,11 @@ return  $id;
 public function beforeedit($id)
 {
 $selectedquestion=$this->db->query("SELECT `id`,`question`,`test` FROM `testquestion` WHERE `test`='$id'")->result();
-$query['selectedquestion']=array();
+//    print_r($selectedquestion);
+$query=array();
 foreach($selectedquestion as $que)
 {
-$query['selectedquestion'][]=$que->question;
+$query[]=$que->question;
 }
 return $query;
 }
@@ -37,30 +38,29 @@ $query=$this->db->query("DELETE FROM `testquestion` WHERE `id`='$id'");
 return $query;
 }
     public function getallquestion(){
-    $query=$this->db->query("SELECT `testquestion`.`id`,`testquestion`.`test`,`testquestion`.`question`,`hq_question`.`text` as `text` FROM `testquestion` LEFT OUTER JOIN `hq_question` ON `hq_question`.`id`=`testquestion`.`question`")->result();
+    $query=$this->db->query("SELECT `id`,`text` FROM `hq_question`")->result();
 return $query;
     }
-}
-
-function edittestquestion($id,$test,$question)
+    
+    
+public function edittestquestion($id,$question)
 	{
-		$this->db->query("DELETE FROM `testquestion` WHERE `product`='$id'");
+		$this->db->query("DELETE FROM `testquestion` WHERE `test`='$id'");
 
-		if(!empty($relatedproduct))
+		if(!empty($question))
 		{
-			foreach($relatedproduct as $key => $pro)
+			foreach($question as $key => $pro)
 			{
 				$data2  = array(
-					'product' => $id,
-					'relatedproduct' => $pro,
+					'test' => $id,
+					'question' => $pro,
 				);
-				$query=$this->db->insert( 'relatedproduct', $data2 );
+				$query=$this->db->insert( 'testquestion', $data2 );
 			}
 		}
 
-		{
-			$this->saveproductlog($id,"Related Product updated");
-		}
 		return 1;
 	}
+}
+
 ?>
