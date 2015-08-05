@@ -14,7 +14,7 @@
             <div class=" form-group">
                 <label class="col-sm-2 control-label" for="normal-field">Pillar</label>
                 <div class="col-sm-4">
-                    <?php echo form_dropdown( "pillar",$pillar,set_value( 'pillar',$before->pillar),"class='chzn-select form-control'");?>
+                    <?php echo form_dropdown( "pillar",$pillar,set_value( 'pillar',$before->pillar),"id='pillarid' class='pillar chzn-select form-control'");?>
                 </div>
             </div>
             <div class=" form-group">
@@ -106,9 +106,9 @@
 
 $(document).ready(function() {
 	var $test=$("select.test");
+	var $pillar=$("select.pillar");
 	var $question=$("select.question");
 	var $option=$("select.option");
-	var $pillar=$("select.pillar");
     var new_base_url="<?php echo site_url(); ?>";
 	
     $test.change(function(){

@@ -36,5 +36,30 @@ public function delete($id)
 $query=$this->db->query("DELETE FROM `hq_department` WHERE `id`='$id'");
 return $query;
 }
+     
+    //functions by avinash
+    
+	public function createbycsv($file)
+	{
+        foreach ($file as $row)
+        {
+            $name=$row['name'];
+            $departmentid=$row['departmentid'];
+            
+		$data  = array(
+			'name' => $name,
+			'deptid' => $departmentid
+		);
+		$query=$this->db->insert( 'hq_department', $data );
+		$id=$this->db->insert_id();
+         
+            
+        }
+			return  1;
+	}
+    
+    
+    
+    //avinash functions end
 }
 ?>

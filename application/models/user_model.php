@@ -655,7 +655,7 @@ class User_model extends CI_Model
             $maritalstatus=$row['maritalstatus'];
             $designation=$row['designation'];
             $department=$row['department'];
-            $experiance=$row['experiance'];
+            $experience=$row['experience'];
             $spanofcontrol=$row['spanofcontrol'];
             $employeeid=$row['employeeid'];
             $branch=$row['branch'];
@@ -737,7 +737,7 @@ class User_model extends CI_Model
 			'maritalstatus' => $maritalstatus,
 			'designation' => $designation,
 			'department' => $department,
-			'noofyearsinorganization' => $experiance,
+			'noofyearsinorganization' => $experience,
 			'spanofcontrol' => $spanofcontrol,
 			'employeeid' => $employeeid,
 			'branch' => $branch,

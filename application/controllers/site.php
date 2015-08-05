@@ -1617,6 +1617,20 @@ $data["option"]=$this->options_model->getoptionsdropdown();
 $data["test"]=$this->test_model->gettestdropdown();
 $data["title"]="Edit useranswer";
 $data["before"]=$this->useranswer_model->beforeedit($this->input->get("id"));
+    
+    
+
+        $data['test'] = $this->test_model->gettestdropdown();
+        $data['question'] = $this->menu_model->getquestionbytest($data['before']->test,$data['before']->pillar);
+        $data['question'] = $this->chintantable->todropdown($data['question']);
+        $data['option'] = $this->menu_model->getoptionbyquestion($data['before']->option);
+        $data['option'] = $this->chintantable->todropdown($data['option']);
+//        $data['pincode'] = $this->pincode_model->getpincodebyarea($data['before']->locality);
+////        print_r($data['pincode']);
+//        $data['pincode'] = $this->chintantable->todropdown($data['pincode']);
+
+    
+    
 $this->load->view("template",$data);
 }
 public function edituseranswersubmit()
@@ -2484,6 +2498,165 @@ $this->load->view("redirect",$data);
 		$data['alertsuccess']="users Uploaded Successfully.";
         
         $data['redirect']="site/viewusers";
+        $this->load->view("redirect",$data);
+    }
+    
+    
+    
+    function uploadteamcsv()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'uploadteamcsv';
+		$data[ 'title' ] = 'Upload team';
+		$this->load->view( 'template', $data );
+	} 
+    
+    function uploadteamcsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $id1=$this->team_model->createbycsv($file);
+//        echo $id1;
+        
+        if($id1==0)
+        $data['alerterror']="New teams could not be Uploaded.";
+		else
+		$data['alertsuccess']="teams Uploaded Successfully.";
+        
+        $data['redirect']="site/viewteam";
+        $this->load->view("redirect",$data);
+    }
+    
+    
+    function uploaddepartmentcsv()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'uploaddepartmentcsv';
+		$data[ 'title' ] = 'Upload department';
+		$this->load->view( 'template', $data );
+	} 
+    
+    function uploaddepartmentcsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $id1=$this->department_model->createbycsv($file);
+//        echo $id1;
+        
+        if($id1==0)
+        $data['alerterror']="New departments could not be Uploaded.";
+		else
+		$data['alertsuccess']="departments Uploaded Successfully.";
+        
+        $data['redirect']="site/viewdepartment";
+        $this->load->view("redirect",$data);
+    }
+    
+    
+    
+    function uploaddesignationcsv()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'uploaddesignationcsv';
+		$data[ 'title' ] = 'Upload designation';
+		$this->load->view( 'template', $data );
+	} 
+    
+    function uploaddesignationcsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $id1=$this->designation_model->createbycsv($file);
+//        echo $id1;
+        
+        if($id1==0)
+        $data['alerterror']="New designations could not be Uploaded.";
+		else
+		$data['alertsuccess']="designations Uploaded Successfully.";
+        
+        $data['redirect']="site/viewdesignation";
+        $this->load->view("redirect",$data);
+    }
+    
+    
+    
+    function uploadbranchcsv()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'uploadbranchcsv';
+		$data[ 'title' ] = 'Upload branch';
+		$this->load->view( 'template', $data );
+	} 
+    
+    function uploadbranchcsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $id1=$this->branch_model->createbycsv($file);
+//        echo $id1;
+        
+        if($id1==0)
+        $data['alerterror']="New branchs could not be Uploaded.";
+		else
+		$data['alertsuccess']="branchs Uploaded Successfully.";
+        
+        $data['redirect']="site/viewbranch";
         $this->load->view("redirect",$data);
     }
     

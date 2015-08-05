@@ -114,5 +114,13 @@ class Chintantable {
         $query = "SELECT CONCAT(UNIX_TIMESTAMP($element1),'000') AS `0`, $element2 as `1` $otherselect  $from $where $group $having $order $limit";
         return $this->CI->db->query($query)->result_array();
     }
+    public function todropdown($query)
+    {
+        foreach ($query as $row)
+        {
+            $return[$row->id] = $row->name;
+        }
+        return $return;
+    }
 }
 /* End of file Someclass.php */
