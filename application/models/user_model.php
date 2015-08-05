@@ -639,5 +639,117 @@ class User_model extends CI_Model
             return $newdata;
         }
     }
+    
+    //avinash function
+    
+    
+	public function createbycsv($file)
+	{
+        foreach ($file as $row)
+        {
+            $name=$row['name'];
+            $email=$row['email'];
+            $username=$row['username'];
+            $gender=$row['gender'];
+            $age=$row['age'];
+            $maritalstatus=$row['maritalstatus'];
+            $designation=$row['designation'];
+            $department=$row['department'];
+            $experiance=$row['experiance'];
+            $spanofcontrol=$row['spanofcontrol'];
+            $employeeid=$row['employeeid'];
+            $branch=$row['branch'];
+            $team=$row['team'];
+            $language=$row['language'];
+            
+            
+            if(strtolower($maritalstatus)=='single')
+            {
+                $maritalstatus=1;
+            }
+            else
+            {
+                $maritalstatus=2;
+            }
+            if(strtolower($gender)=='male')
+            {
+                $gender=1;
+            }
+            else
+            {
+                $gender=2;
+            }
+            
+        
+            $designationquery=$this->db->query("SELECT * FROM `hq_designation` WHERE `name`LIKE '$designation'")->row();
+            if(empty($designationquery))
+            {
+                $this->db->query("INSERT INTO `hq_designation`(`name`) VALUES ('$designation')");
+                $designation=$this->db->insert_id();
+            }
+            else
+            {
+                $designation=$designationquery->id;
+            }
+            
+        
+            $departmentquery=$this->db->query("SELECT * FROM `hq_department` WHERE `name`LIKE '$department'")->row();
+            if(empty($departmentquery))
+            {
+                $this->db->query("INSERT INTO `hq_department`(`name`) VALUES ('$department')");
+                $department=$this->db->insert_id();
+            }
+            else
+            {
+                $department=$departmentquery->id;
+            }
+            
+            $branchquery=$this->db->query("SELECT * FROM `hq_branch` WHERE `name`LIKE '$branch'")->row();
+            if(empty($branchquery))
+            {
+                $this->db->query("INSERT INTO `hq_branch`(`name`) VALUES ('$branch')");
+                $branch=$this->db->insert_id();
+            }
+            else
+            {
+                $branch=$branchquery->id;
+            }
+            
+            $teamquery=$this->db->query("SELECT * FROM `hq_team` WHERE `name`LIKE '$team'")->row();
+            if(empty($teamquery))
+            {
+                $this->db->query("INSERT INTO `hq_team`(`name`) VALUES ('$team')");
+                $team=$this->db->insert_id();
+            }
+            else
+            {
+                $team=$teamquery->id;
+            }
+            
+		$data  = array(
+			'name' => $name,
+			'email' => $email,
+			'accesslevel' => 4,
+			'status' => 1,
+			'username' => $username,
+			'gender' => $gender,
+			'age' => $age,
+			'maritalstatus' => $maritalstatus,
+			'designation' => $designation,
+			'department' => $department,
+			'noofyearsinorganization' => $experiance,
+			'spanofcontrol' => $spanofcontrol,
+			'employeeid' => $employeeid,
+			'branch' => $branch,
+			'language' => 0,
+			'team' => $team
+		);
+		$query=$this->db->insert( 'user', $data );
+		$id=$this->db->insert_id();
+         
+            
+        }
+			return  1;
+	}
 }
 ?>

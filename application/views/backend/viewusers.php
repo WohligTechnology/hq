@@ -1,9 +1,13 @@
 <div class=" row" style="padding:1% 0;">
-	<div class="col-md-12">
+	<div class="col-md-8">
 	
 		<a class="btn btn-primary pull-right"  href="<?php echo site_url('site/createuser'); ?>"><i class="icon-plus"></i>Create </a> &nbsp; 
 	</div>
 	
+	<div class="col-md-2">
+	
+		<a class="btn btn-secondary"  href="<?php echo site_url('site/uploadusercsv'); ?>"><i class="icon-trash"></i>Upload CSV</a> &nbsp; 
+	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">

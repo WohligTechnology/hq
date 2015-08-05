@@ -4,6 +4,8 @@
 			<a href="<?php echo site_url('site/viewusers'); ?>" class="btn btn-primary pull-right"><i class="icon-long-arrow-left"></i>&nbsp;Back</a>
 		</div>
 	</div>
+	
+	
 </div>
 <div class="row">
 	<div class="col-lg-12">

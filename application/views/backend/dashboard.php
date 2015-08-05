@@ -4,8 +4,8 @@
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 <!--<div id="container" style="height: 400px"></div>-->
 <div id="nodata" style="display:none;">No Data Found</div>
-<div class="well" style="text-align: center;background-color: #7cb5ec;">
-    <i class="fa fa-bar-chart"></i> <b>Charts of Recent Test</b>
+<div class="well" style="text-align: left;background-color: white;color:black;width:275px;">
+    <span style="font-size: 20px;"><b>Charts of Recent Test :-</b></span>
 </div>
 
 <?php 

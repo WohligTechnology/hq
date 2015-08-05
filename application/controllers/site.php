@@ -2430,6 +2430,65 @@ $data["redirect"]="site/viewtestpillarexpected";
 $this->load->view("redirect",$data);
 }
 	
-
+//functions by avinash
+    
+    
+    public function getquestionbytest() {
+        $test=$this->input->get_post("test");
+        $pillar=$this->input->get_post("pillar");
+        $data1 = $this->menu_model->getquestionbytest($test,$pillar);
+        $data["message"] = $data1;
+        $this->load->view("json", $data);
+    }
+    
+    public function getoptionbyquestion() {
+        $question=$this->input->get_post("question");
+        $data["message"]=$this->menu_model->getoptionbyquestion($question);
+        $this->load->view("json",$data);
+    }
+    
+    
+    
+    function uploadusercsv()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'uploadusercsv';
+		$data[ 'title' ] = 'Upload user';
+		$this->load->view( 'template', $data );
+	} 
+    
+    function uploadusercsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $id1=$this->user_model->createbycsv($file);
+//        echo $id1;
+        
+        if($id1==0)
+        $data['alerterror']="New users could not be Uploaded.";
+		else
+		$data['alertsuccess']="users Uploaded Successfully.";
+        
+        $data['redirect']="site/viewusers";
+        $this->load->view("redirect",$data);
+    }
+    
+    
+    //end of avinash functions
+    
 }
 ?>

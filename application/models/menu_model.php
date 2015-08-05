@@ -379,6 +379,28 @@ FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_user
         return $query;
     }
     
+    public function getoptionbyquestion($question) {
+        $query=$this->db->query("SELECT `id`,`optiontext` as `name` FROM `hq_options` WHERE `question`='$question'")->result();
+        return $query;
+    }
+    public function getquestionbytest($id,$pillar) {
+        $query = "SELECT `testquestion`.`id` as `textquestionid`, `testquestion`.`test`,`testquestion`. `question` as `id` ,`hq_question`.`text` as `name`
+FROM `testquestion` LEFT OUTER JOIN `hq_question` ON `hq_question`.`id`=`testquestion`.`question`
+WHERE `testquestion`.`test`='$id' AND `hq_question`.`pillar`='$pillar' ";
+        $question = $this->db->query($query)->result();
+        return $question;
+    }
+    public function getpincodebyoption($option) {
+        $query=$this->db->query("SELECT `id`,`optiontext` as `name` FROM `hq_option` WHERE `question`='$option'")->result();
+        return $query;
+    }
+    
+    
+    
+    
+    
+    
+    
 //    function getweightofpillarsbyteam($userid)
 //    {
 //        $teamquery=$this->db->query("SELECT * FROM `user` WHERE `id`='$userid'")->row();
