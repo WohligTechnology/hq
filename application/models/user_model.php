@@ -172,9 +172,9 @@ class User_model extends CI_Model
 	{
 		
 		$return=array(
-		"0" => "Organization",
-		"1" => "Branch",
-		"2" => "Department",
+		"1" => "Organization",
+		"2" => "Branch",
+		"3" => "Department",
 		"4" => "Team"
 		);
 		
@@ -184,16 +184,16 @@ class User_model extends CI_Model
 	{
 		
 		$return=array(
-		"0" => "Per Day",
-		"1" => "Per Two Days",
-		"2" => "Per Three Days",
-		"3" => "Per Four Days",
-		"4" => "Per Five Days",
-		"5" => "Per Six Days",
-		"6" => "Per week",
-		"7" => "Per two week",
-		"8" => "Per three week",
-		"9" => "Per month"
+		"1" => "Per Day",
+		"2" => "Per Two Days",
+		"3" => "Per Three Days",
+		"4" => "Per Four Days",
+		"5" => "Per Five Days",
+		"6" => "Per Six Days",
+		"7" => "Per week",
+		"14" => "Per two week",
+		"21" => "Per three week",
+		"30" => "Per month"
 		);
 		
 		return $return;

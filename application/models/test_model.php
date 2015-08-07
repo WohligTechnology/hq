@@ -71,6 +71,12 @@ return $query;
 		}
 		
 		return $return;
-	}  
+	} 
+    
+    public function gettestdatabyid($testid)
+    {
+        $query=$this->db->query("SELECT `id`, `name`, `units`, `schedule`, `startdate`, `department`, `branch`, `designation`, `check`, `team`, `timestamp`, `enddate` FROM `test` WHERE `id`='$testid'")->row();
+        return $query;
+    }
 }
 ?>

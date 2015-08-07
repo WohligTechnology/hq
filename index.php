@@ -201,5 +201,7 @@ if (defined('ENVIRONMENT'))
  */
 require_once BASEPATH.'core/CodeIgniter.php';
 
+if ( function_exists( 'date_default_timezone_set' ) )
+date_default_timezone_set('Asia/Calcutta'); 
 /* End of file index.php */
 /* Location: ./index.php */
