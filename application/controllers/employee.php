@@ -91,59 +91,73 @@ class Employee extends CI_Controller
                 }
 //                $alreadysendquestion=$this->db->quertion("SELECT * FROM `testquestion` WHERE `test`='$testid' AND `sendstatus`=1 ORDER BY `id` DESC")->row();
                 $todaysdatetime=date("Y-m-d h:i:s");
-                $sendq=$this->db->query("SELECT * FROM `testquestion` WHERE `test`='$testid' AND `sendstatus`=0 AND `dateandtime`<='$todaysdatetime'")->row();;
-                $question=$sendq->question;
-                $test=$sendq->test;
-                $questiondata=$this->db->query("SELECT * FROM `hq_question` WHERE `id`='$question'")->row();
-                echo "Check-".$check;
-                $userwhere="";
-                if($check==1)
+                $sendq=$this->db->query("SELECT * FROM `testquestion` WHERE `test`='$testid' AND `sendstatus`=0 AND `dateandtime`<='$todaysdatetime'")->row();
+                if(!empty($sendq))
                 {
+                    echo "SELECTED ATLEAST ONE QUESTION ";
+                    $testquestionid=$sendq->id;
+                    $question=$sendq->question;
+                    $test=$sendq->test;
+                    $questiondata=$this->db->query("SELECT * FROM `hq_question` WHERE `id`='$question'")->row();
+                    echo "Check-".$check;
                     $userwhere="";
-                }
-                else if($check==2)
-                {
-                    $branchid=$value->branch;
-                    $userwhere=" AND `user`.`branch`='$branchid' ";
-                }
-                else if($check==3)
-                {
-                    $departmentid=$value->department;
-                    $userwhere=" AND `user`.`department`='$departmentid' ";
-                }
-                else if($check==4)
-                {
-                    $teamid=$value->team;
-                    $userwhere=" AND `user`.`team`='$teamid' ";
+                    if($check==1)
+                    {
+                        $userwhere="";
+                    }
+                    else if($check==2)
+                    {
+                        $branchid=$value->branch;
+                        $userwhere=" AND `user`.`branch`='$branchid' ";
+                    }
+                    else if($check==3)
+                    {
+                        $departmentid=$value->department;
+                        $userwhere=" AND `user`.`department`='$departmentid' ";
+                    }
+                    else if($check==4)
+                    {
+                        $teamid=$value->team;
+                        $userwhere=" AND `user`.`team`='$teamid' ";
+                    }
+                    else
+                    {
+                        $userwhere="";
+                    }
+
+                    $userdata=$this->db->query("SELECT * FROM `user` WHERE `user`.`accesslevel`=4 $userwhere")->result();
+
+                    foreach($userdata as $key=>$userval)
+                    {
+                        $userid=$userval->id;
+                        $useremail=$userval->email;
+
+
+
+                        $this->load->library('email');
+                        $this->email->from('avinash@wohlig.com', 'HQ');
+                        $this->email->to($useremail);
+                        $this->email->subject('Welcome to HQ');   
+
+                        $hashvalue=base64_encode ($userid."&".$testid."&".$question."&hq");
+                        $link="<a href='http://localhost/hq/index.php/employee/answerquestion?asqy=$hashvalue'>Click here </a> To Answer the Question.";
+
+                        $message = "Hello Please Answer the question.<br> $link";
+                        $this->email->message($message);
+                        if($this->email->send())
+                        {
+                            $addtouserquestionsend=$this->db->query("INSERT INTO `userquestionsend`(`user`, `test`, `question`, `timestamp`) VALUES ('$userid','$testid','$question',NULL)");
+                        }
+
+                    }
+
+                    $updatequery=$this->db->query("UPDATE `testquestion` SET `sendstatus`=1 WHERE `id`='$testquestionid'");
                 }
                 else
                 {
-                    $userwhere="";
+                    echo "SELECTED 0 QUESTION";
+                    return 0;
                 }
-                    
-                $userdata=$this->db->query("SELECT * FROM `user` WHERE `user`.`accesslevel`=4 $userwhere")->result();
-                
-                foreach($userdata as $key=>$userval)
-                {
-                    $userid=$userval->id;
-                    $useremail=$userval->email;
-                    
-                    
-                       
-                    $this->load->library('email');
-                    $this->email->from('avinash@wohlig.com', 'HQ');
-                    $this->email->to($useremail);
-                    $this->email->subject('Welcome to HQ');   
-
-                    $hashvalue=base64_encode ($userid."&".$testid."&".$question."&hq");
-                    $link="<a href='http://localhost/hq/employee/answerquestion?asqy=$hashvalue'>Click here </a> To Answer the Question.";
-            
-                    $message = "Hello Please Answer the question.<br> $link";
-                    $this->email->message($message);
-                    $this->email->send();
-        
-                }
-                
                 print_r($userdata);
 //                $testquestiondata=$this->db->query("SELECT * FROM `testquestion` WHERE `test`='$testid' AND `sendstatus`=0");
             }
@@ -176,10 +190,22 @@ class Employee extends CI_Controller
             );
 
             $this->session->set_userdata($newdata);
-        $data['test']=$this->test_model->gettestdatabyid($testid);
-        $data['question']=$this->question_model->getquestiondatabyid($questionid);
-        print_r($newdata);
-        echo $hash;
+        $data['testdata']=$this->test_model->gettestdatabyid($testid);
+        $data['questiondata']=$this->question_model->getquestiondatabyid($questionid);
+        
+//        $data["user"]=$this->user_model->getuserdropdown();
+//        $data["pillar"]=$this->pillar_model->getpillardropdown();
+//        
+//        $data['test'] = $this->test_model->gettestdropdown();
+//        $data['question'] = $this->menu_model->getquestionbytest($testid,$data['questiondata']->pillar);
+//        $data['question'] = $this->chintantable->todropdown($data['question']);
+//        $data['option'] = $this->menu_model->getoptionbyquestion($data['before']->option);
+//        $data['option'] = $this->chintantable->todropdown($data['option']);
+//        $data['userid']=$userid; 
+//        $data["page"]="edituseranswerbyemployee";
+//        $this->load->view("template",$data);
+//        $data['options']=$this->options_model->getoptionsbyquestionid($optionsid);
+        print_r($data);
     }
     
     public function sendquestionsss()
