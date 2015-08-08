@@ -59,5 +59,17 @@ return $query;
 		
 		return $return;
 	}
+    
+    public function getquestiondatabyid($questionid)
+    {
+        $query=$this->db->query("SELECT `hq_question`.`id`, `hq_question`.`pillar`,`hq_question`. `noofans`,`hq_question`. `order`,`hq_question`. `timestamp`,`hq_question`. `text`,`hq_pillar`.`name` AS `pillarname` 
+        FROM `hq_question` LEFT OUTER JOIN `hq_pillar` ON `hq_pillar`.`id`=`hq_question`.`pillar`
+        WHERE `hq_question`.`id`='$questionid'")->row();
+        $queryoptions=$this->db->query("SELECT `id`, `question`, `representation`, `actualorder`, `image`, `order`, `weight`, `optiontext`, `text` 
+FROM `hq_options` 
+WHERE `question`='$questionid'")->result();
+        $query->options=$queryoptions;
+        return $query;
+    }
 }
 ?>
