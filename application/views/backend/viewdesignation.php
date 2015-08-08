@@ -1,6 +1,6 @@
 <div class="row" style="padding:1% 0">
     <div class="col-md-10">
-        <a class="btn btn-primary pull-right" href="<?php echo site_url(" site/createdesignation "); ?>"><i class="icon-plus"></i>Create </a> &nbsp;
+        <a class="btn btn-primary pull-right" href="<?php echo site_url("site/createdesignation"); ?>"><i class="icon-plus"></i>Create </a> &nbsp;
     </div>
     <div class="col-md-2">
 	
