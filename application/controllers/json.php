@@ -538,4 +538,27 @@ $id=$this->input->get_post("id");
 $data["message"]=$this->content_model->getsinglecontent($id);
 $this->load->view("json",$data);
 }
+ 
+ //functions by avinash
+ 
+     public function generatejson()
+     {
+         $data1=$this->menu_model->getgeneratedjson();
+         $data['message']=$data1;
+         $this->load->view('json',$data);
+     }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 } ?>
