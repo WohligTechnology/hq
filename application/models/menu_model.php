@@ -398,6 +398,248 @@ WHERE `testquestion`.`test`='$id' AND `hq_question`.`pillar`='$pillar' ";
     
     
     
+    function getgeneratedjsonold()
+    {
+        $jsondata=new stdClass();
+        $jsondata->credits=new stdClass();
+        $jsondata->credits->enabled=false;
+        
+        $arr = array();
+//        $arr->credits=new stdClass();
+//        $arr->credits->enabled=false;
+        
+        $testquery=$this->db->query("SELECT * FROM `test` ORDER BY `id` DESC LIMIT 0,2")->result();
+        foreach($testquery as $row1)
+        {
+            $testid=$row1->id;
+            $query=$this->db->query("SELECT * FROM `hq_pillar` ORDER BY `order` ASC")->result();
+            foreach($query as $row)
+            {
+                $pillarid = $row->id;
+                $testexpectedweights=$this->db->query("SELECT `testpillarexpected`.`pillar`,`testpillarexpected`.`test`,IFNULL(`testpillarexpected`.`expectedvalue`,0) as `weight`,`test`.`name` as `testname` FROM `testpillarexpected` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillarexpected`.`test`  WHERE `test`='$testid' AND `pillar`='$pillarid'")->row();
+                $testexpectedweight=$testexpectedweights->weight;
+                $testname=$testexpectedweights->testname;
+                $pillaraveragevalues=$this->db->query("SELECT IFNULL(AVG(`hq_options`.`weight`),0) AS `totalweight`
+    FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option` LEFT OUTER JOIN `user` ON `hq_useranswer`.`user`=`user`.`id`
+                WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`test`='$testid'")->row();
+                
+                $row->pillaraveragevalues=$pillaraveragevalues->totalweight;
+                $row->testname=$testname;
+                $row->testexpectedweight=$testexpectedweight;
+            }
+            array_push($arr,$query);
+        }
+//        print_r($arr);
+        $categoryvalue="";
+        $pillarvalue="";
+        $expectedvalue="";
+        $actualvalue="";
+        foreach($arr as $value1)
+                    {
+                        foreach($value1 as $key=>$value)
+                        {
+                            if($key==0)
+                            {
+                                $categoryvalue.=$value->name;
+                                $pillarvalue.=$value->weight;
+                                $expectedvalue.=$value->testexpectedweight;
+                                $actualvalue.=$value->pillaraveragevalues;
+                            }
+                            else
+                            {
+                                $categoryvalue.=",".$value->name;
+                                $pillarvalue.=",".$value->weight;
+                                $expectedvalue.=",".$value->testexpectedweight;
+                                $actualvalue.=",".$value->pillaraveragevalues;
+                            }
+                        }
+                    }
+        echo $categoryvalue." <-cat<br>";
+        echo $pillarvalue." <-pillar<br>";
+        echo $expectedvalue." <-expected<br>";
+        echo $actualvalue." <-actualt<br>";
+        
+        
+//        $jsondata->chart=new stdClass();
+//        $jsondata->chart->type='column';
+//        
+//        $jsondata->title=new stdClass();
+//        $jsondata->title->text='Pillar Wise Average';
+//        
+//        $jsondata->xAxix=new stdClass();
+//        $jsondata->xAxix->categories=[23,50,30];
+//        $jsondata->xAxix->crosshair=true;
+//        
+//        $jsondata->yAxis=new stdClass();
+//        $jsondata->yAxis->min=0;
+//        $jsondata->yAxis->title=new stdClass();
+//        $jsondata->yAxis->title->text='Score';
+//        
+//        $jsondata->tooltip=new stdClass();
+//        $jsondata->tooltip->headerFormat='<span style="font-size:10px">{point.key}</span><table>';
+//        $jsondata->tooltip->pointFormat='<tr><td style="color:{series.color};padding:0">{series.name}: + </td><td style="padding:0"><b>{point.y:.1f} </b></td></tr>';
+//        $jsondata->tooltip->footerFormat='</table>';
+//        $jsondata->tooltip->shared=true;
+//        $jsondata->tooltip->useHTML=true;
+//        
+//        $jsondata->plotOptions=new stdClass();
+//        $jsondata->plotOptions->column=new stdClass();
+//        $jsondata->plotOptions->column->pointPadding=0.2;
+//        $jsondata->plotOptions->column->borderWidth=0;
+//        
+//        $jsondata->series=array();
+//        
+//        $obj=new stdClass();
+//        $obj->name="Pillar";
+//        $obj->data=[10,20,30];
+//        
+//        array_push($jsondata->series,$obj);
+//        
+//        $obj=new stdClass();
+//        $obj->name="Expected";
+//        $obj->data=[22,33,44];
+//        
+//        array_push($jsondata->series,$obj);
+//        
+//        $obj=new stdClass();
+//        $obj->name="Actual";
+//        $obj->data=[11,22,33];
+//        
+//        array_push($jsondata->series,$obj);
+        
+//        return $jsondata;
+    }
+    
+    
+    
+    
+    
+    
+    function getgeneratedjson()
+    {
+        $arr = array();
+//        $arr->credits=new stdClass();
+//        $arr->credits->enabled=false;
+        
+//        $testquery=$this->db->query("SELECT * FROM `test` ORDER BY `id` DESC LIMIT 0,1")->result();
+//        foreach($testquery as $row1)
+//        {
+//            $testid=$row1->id;
+//            $query=$this->db->query("SELECT * FROM `hq_pillar` ORDER BY `order` ASC")->result();
+//            foreach($query as $row)
+//            {
+//                $pillarid = $row->id;
+//                $testexpectedweights=$this->db->query("SELECT `testpillarexpected`.`pillar`,`testpillarexpected`.`test`,IFNULL(`testpillarexpected`.`expectedvalue`,0) as `weight`,`test`.`name` as `testname` FROM `testpillarexpected` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillarexpected`.`test`  WHERE `test`='$testid' AND `pillar`='$pillarid'")->row();
+//                $testexpectedweight=$testexpectedweights->weight;
+//                $testname=$testexpectedweights->testname;
+//                $pillaraveragevalues=$this->db->query("SELECT IFNULL(AVG(`hq_options`.`weight`),0) AS `totalweight`
+//    FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option` LEFT OUTER JOIN `user` ON `hq_useranswer`.`user`=`user`.`id`
+//                WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`test`='$testid'")->row();
+//                
+//                $row->pillaraveragevalues=$pillaraveragevalues->totalweight;
+//                $row->testname=$testname;
+//                $row->testexpectedweight=$testexpectedweight;
+//            }
+//            array_push($arr,$query);
+//        }
+        
+        $testquery=$this->db->query("SELECT * FROM `test` ORDER BY `id` DESC")->row();
+        
+            $testid=$testquery->id;
+            $query=$this->db->query("SELECT * FROM `hq_pillar` ORDER BY `order` ASC")->result();
+            foreach($query as $row)
+            {
+                $pillarid = $row->id;
+                $testexpectedweights=$this->db->query("SELECT `testpillarexpected`.`pillar`,`testpillarexpected`.`test`,IFNULL(`testpillarexpected`.`expectedvalue`,0) as `weight`,`test`.`name` as `testname` FROM `testpillarexpected` LEFT OUTER JOIN `test` ON `test`.`id`=`testpillarexpected`.`test`  WHERE `test`='$testid' AND `pillar`='$pillarid'")->row();
+                $testexpectedweight=$testexpectedweights->weight;
+                $testname=$testexpectedweights->testname;
+                $pillaraveragevalues=$this->db->query("SELECT IFNULL(AVG(`hq_options`.`weight`),0) AS `totalweight`
+    FROM `hq_useranswer`  LEFT OUTER JOIN `hq_options` ON `hq_options`.`id`=`hq_useranswer`.`option` LEFT OUTER JOIN `user` ON `hq_useranswer`.`user`=`user`.`id`
+                WHERE `hq_useranswer`.`pillar`='$pillarid' AND `hq_useranswer`.`test`='$testid'")->row();
+                
+                $row->pillaraveragevalues=$pillaraveragevalues->totalweight;
+                $row->testname=$testname;
+                $row->testexpectedweight=$testexpectedweight;
+            }
+        $arr=$query;
+//            array_push($arr,$query);
+//        }
+//        print_r($arr);
+        $categoryvalue=array();
+        $pillarvalue=array();
+        $expectedvalue=array();
+        $actualvalue=array();
+        foreach($arr as $key=>$value)
+         {
+                    array_push($categoryvalue,$value->name);
+                    array_push($pillarvalue,floatval($value->weight));
+                    array_push($expectedvalue,floatval($value->testexpectedweight));
+                    array_push($actualvalue,floatval($value->pillaraveragevalues));
+         }
+        
+        
+                        $jsondata=new stdClass();
+                        $jsondata->credits=new stdClass();
+                        $jsondata->credits->enabled=false;
+        
+                        $jsondata->chart=new stdClass();
+                        $jsondata->chart->type='column';
+
+                        $jsondata->title=new stdClass();
+                        $jsondata->title->text='Pillar Wise Average';
+
+                        $jsondata->xAxis=new stdClass();
+                        $jsondata->xAxis->categories=$categoryvalue;
+                        $jsondata->xAxis->crosshair=true;
+
+                        $jsondata->yAxis=new stdClass();
+                        $jsondata->yAxis->min=0;
+                        $jsondata->yAxis->title=new stdClass();
+                        $jsondata->yAxis->title->text='Score';
+
+                        $jsondata->tooltip=new stdClass();
+                        $jsondata->tooltip->headerFormat='<span style="font-size:10px">{point.key}</span><table>';
+                        $jsondata->tooltip->pointFormat='<tr><td style="color:{series.color};padding:0">{series.name}: + </td><td style="padding:0"><b>{point.y:.1f} </b></td></tr>';
+                        $jsondata->tooltip->footerFormat='</table>';
+                        $jsondata->tooltip->shared=true;
+                        $jsondata->tooltip->useHTML=true;
+
+                        $jsondata->plotOptions=new stdClass();
+                        $jsondata->plotOptions->column=new stdClass();
+                        $jsondata->plotOptions->column->pointPadding=0.2;
+                        $jsondata->plotOptions->column->borderWidth=0;
+
+                        $jsondata->series=array();
+
+                        $obj=new stdClass();
+                        $obj->name="Pillar";
+                        $obj->data=$pillarvalue;
+
+                        array_push($jsondata->series,$obj);
+
+                        $obj=new stdClass();
+                        $obj->name="Expected";
+                        $obj->data=$expectedvalue;
+
+                        array_push($jsondata->series,$obj);
+
+                        $obj=new stdClass();
+                        $obj->name="Actual";
+                        $obj->data=$actualvalue;
+
+                        array_push($jsondata->series,$obj);
+        
+            
+//        echo $categoryvalue." <-cat<br>";
+//        echo $pillarvalue." <-pillar<br>";
+//        echo $expectedvalue." <-expected<br>";
+//        echo $actualvalue." <-actualt<br>";
+        
+        return $jsondata;
+    }
+    
+    
+    
     
     
     

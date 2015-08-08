@@ -47,6 +47,17 @@ class Site extends CI_Controller
         
 	}
     
+    public function index2()
+	{
+		$access = array("1","2","3");
+		$this->checkaccess($access);
+        
+		$data[ 'page' ] = 'dashboard2';
+		$data[ 'title' ] = 'Welcome';
+		$this->load->view( 'template', $data );	
+        
+	}
+    
 	public function createuser()
 	{
 		$access = array("1","3");
