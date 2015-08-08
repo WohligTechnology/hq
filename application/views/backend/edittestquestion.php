@@ -1,9 +1,12 @@
 <section class="panel">
+  <a href="<?php echo site_url("site/viewschedule?id=").$this->input->get('id'); ?>" class="btn btn-info pullrightside">View</a>
     <header class="panel-heading">
         Test Questions
     </header>
+     
     <div class="panel-body">
         <form class="form-horizontal row-fluid" method="post" action="<?php echo site_url('site/edittestquestionsubmit');?>" enctype="multipart/form-data">
+          
             <div class="form-row control-group row-fluid" style="display:none;">
                 <label class="control-label span3" for="normal-field">ID</label>
                 <div class="controls span9">
@@ -21,8 +24,6 @@
                     <?php } ?>
                 </div>
             </div>
-
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">&nbsp;</label>
                 <div class="col-sm-4">
